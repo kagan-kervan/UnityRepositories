@@ -15,7 +15,7 @@ public class SceneManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        TileDrawing(-8.7f, -4.3f, 1);
+        TileDrawing(-8.7f, -4.3f, 1f);
     }
 
     // Update is called once per frame
