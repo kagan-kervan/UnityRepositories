@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     public Transform AttackPoint;
     public float attackRange = 0.5f;
     public LayerMask enemyLayers;
-
+    public bool isFaceRight = true;
 
     // Start is called before the first frame update
     void Start()
@@ -50,8 +50,15 @@ public class Player : MonoBehaviour
         Vector2 newVelocity = rbg2D.velocity;
         newVelocity.x = value * speedMultiplier;
         rbg2D.velocity = newVelocity;
+        //Flip the object.
+        if (value < 0)
+            isFaceRight = false;
+        else if(value>0)
+            isFaceRight = true;
+        FlipTheObject(isFaceRight);
         //Make the animation start.
         animator.SetBool("MovementBool",true);
+
 	}
 
     public void PlayerCombat()
@@ -66,14 +73,37 @@ public class Player : MonoBehaviour
 
         foreach(Collider2D enemy in hitEnemies)
 		{
-            Debug.Log("Hit Check");
-            Destroy(enemy.gameObject);
+            if (enemy.GetComponent<Enemies>().enemyStates!=Enemy1.States.DEATH)
+                enemy.GetComponent<Enemies>().TakeHit();
 		}
 
 
     }
 
+    public void FlipTheObject(bool isFaceRight)
+	{
+        Quaternion rotate = this.transform.rotation;
+		if (isFaceRight)
+		{
+            rotate.y = 0;
+            this.transform.rotation = rotate;
+        }
+		else
+		{
+            rotate.y = 180;
+            this.transform.rotation = rotate;
+		}
+	}
 
+    public void TakeHit()
+	{
+        this.life--;
+        animator.SetTrigger("HitTrigger");
+        if (this.life <= 0)
+            Debug.Log("Dead Check.");
+	}
+
+    
 	
     public void OnDrawGizmosSelected()
 	{ //Draws attack range when the object is selected.
