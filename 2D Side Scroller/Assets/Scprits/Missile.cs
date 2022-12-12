@@ -14,12 +14,13 @@ public class Missile : MonoBehaviour
     {
         if (isFiringRight == true)
         {
-            transform.position += -transform.right * moveSpeed * Time.deltaTime;
+            Debug.Log("Move left Check.");
+            transform.position += transform.right * moveSpeed * Time.deltaTime;
         }
 		else
         {
-            transform.position += transform.right * moveSpeed * Time.deltaTime;
-
+            transform.position += -transform.right * moveSpeed * Time.deltaTime;
+            Debug.Log("Move right Check.");
         }
 
         if (transform.position.x > 20 || transform.position.x < -20)

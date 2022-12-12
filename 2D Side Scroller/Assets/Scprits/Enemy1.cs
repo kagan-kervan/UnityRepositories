@@ -8,6 +8,7 @@ public class Enemy1 : Enemies
     public int health;
     public int hitPoint;
     public float speedMultiplier;
+    public float distance;
     public Animator animator;
     public Player player;
     public GameObject playerObject;
@@ -15,7 +16,7 @@ public class Enemy1 : Enemies
     public Transform AttackPoint;
     public float attackRange = 0.5f;
     public int hitCount;
-    private float hitTimer = 2.0f;
+    private float hitTimer = 1.5f;
     private float deadTimer = 2.0f;
     public bool isFaceRight = true;
     public LayerMask playerLayers;
@@ -61,7 +62,7 @@ public class Enemy1 : Enemies
 	{
         Vector3 objectPosiiton = this.transform.position;
         Vector3 targetPosition = playerObject.transform.position;
-        float distance = Mathf.Abs(objectPosiiton.x-targetPosition.x);
+        distance = UpdateDistance();
         if (distance<1.1f)
 		{
             rgb2D.velocity = new Vector2(0, 0);
@@ -90,6 +91,13 @@ public class Enemy1 : Enemies
             isFaceRight = true;
         FliptheObject(isFaceRight);
 	}
+    public float UpdateDistance()
+    {
+        Vector3 objectPosiiton = this.transform.position;
+        Vector3 targetPosition = playerObject.transform.position;
+        distance = Mathf.Abs(objectPosiiton.x - targetPosition.x);
+        return distance;
+    }
 
     public override void TakeHit()
 	{
@@ -121,7 +129,9 @@ public class Enemy1 : Enemies
     }
 
     public void FliptheObject(bool isFaceRight)
-	{
+    {
+        if (distance < 0.5f)
+            return;
         Quaternion rotate = this.transform.rotation;
         if (isFaceRight == true) // if right is where to face.
 		{

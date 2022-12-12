@@ -13,7 +13,7 @@ public class Enemy2 : Enemies
     public Rigidbody2D rgb2D;
     public Transform AttackPoint;
     private float hitTimer = 0f;
-    private float deadTimer = 2.0f;
+    private float deadTimer = 1.5f;
     public bool isFaceRight = true;
     public float distance;
     public Missile missileBehaviour;
@@ -57,6 +57,8 @@ public class Enemy2 : Enemies
     }
     public void FliptheObject(bool isFaceRight)
     {
+        if (distance < 0.5f)
+            return;
         Quaternion rotate = this.transform.rotation;
         if (isFaceRight == true) // if right is where to face.
         {
