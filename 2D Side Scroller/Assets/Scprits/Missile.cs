@@ -19,11 +19,13 @@ public class Missile : MonoBehaviour
         }
 		else
         {
-            transform.position += -transform.right * moveSpeed * Time.deltaTime;
+            Vector3 newPos = transform.position;
+            newPos.x += -Mathf.Abs(transform.position.x * moveSpeed * Time.deltaTime)/5;
+            transform.position = newPos;
             Debug.Log("Move right Check.");
         }
 
-        if (transform.position.x > 20 || transform.position.x < -20)
+        if (transform.position.x > 120 || transform.position.x < -120)
         {
             Destroy(gameObject);
         }
@@ -33,7 +35,6 @@ public class Missile : MonoBehaviour
 
 	private void OnCollisionEnter2D(Collision2D collision)
 	{
-        Debug.Log("Collision Check.");
         player = collision.collider.GetComponent<Player>();
         if (player != null)
         {
