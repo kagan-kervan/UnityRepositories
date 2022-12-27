@@ -10,13 +10,11 @@ public class Enemy3 : Enemies
     public float speedMultiplier;
     public float distance;
     public Animator animator;
-    public Player player;
-    public GameObject playerObject;
     public Rigidbody2D rgb2D;
     public Transform AttackPoint;
     public float attackRange = 0.5f;
     public int hitCount;
-    private float hitTimer = 1.5f;
+    private float hitTimer = 3f;
     private float deadTimer = 2.0f;
     public bool isFaceRight = true;
     public LayerMask playerLayers;
@@ -30,11 +28,6 @@ public class Enemy3 : Enemies
         enemyStates = States.MOVING;
     }
 
-    public void GetPlayerComponent(GameObject obj) //Use it when you create this objects in game mangaer.
-    {
-        player = obj.GetComponent<Player>();
-        playerObject = player.gameObject;
-    }
     // Update is called once per frame
     void Update()
     {
@@ -103,6 +96,7 @@ public class Enemy3 : Enemies
     {
         this.health -= 20;
         animator.SetTrigger("TakeHit");
+        this.hitTimer = 1.5f;
         if (this.health <= 0)
         {
             enemyStates = States.DEATH;

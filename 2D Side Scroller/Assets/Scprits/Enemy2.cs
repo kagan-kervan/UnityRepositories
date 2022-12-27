@@ -8,11 +8,9 @@ public class Enemy2 : Enemies
     public int hitPoint;
     public float speedMultiplier;
     public Animator animator;
-    public Player player;
-    public GameObject playerObject;
     public Rigidbody2D rgb2D;
     public Transform AttackPoint;
-    private float hitTimer = 0f;
+    private float hitTimer = 2f;
     private float deadTimer = 1.5f;
     public bool isFaceRight = true;
     public float distance;
@@ -27,11 +25,6 @@ public class Enemy2 : Enemies
         
     }
 
-    public void GetPlayerComponent(GameObject obj)  //Use it when you create this objects in game mangaer.
-    {
-        player = obj.GetComponent<Player>();
-        playerObject = player.gameObject;
-	}
     // Update is called once per frame
     void Update()
     {
@@ -129,6 +122,7 @@ public class Enemy2 : Enemies
 	public override void TakeHit()
     {
         this.health -= 20;
+        this.hitTimer = 1.3f;
         animator.SetTrigger("TakeHit");
         if (this.health <= 0)
         {
