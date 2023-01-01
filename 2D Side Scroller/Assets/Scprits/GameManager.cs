@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour
     public float spawnTimer = 2.0f;
     public float attackTime = 1.2f;
     public int level;
+    public bool spawner = true;
+    public int spawnCount;
 
     // Start is called before the first frame update
     void Start()
@@ -24,11 +26,12 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         spawnTimer = UpdateTimer(spawnTimer);
-        if(this.spawnTimer<= 0f && enemySpawnQueue.Peek()!= null)
+        if(this.spawnTimer<= 0f && spawner)
 		{
             SpawnEnemy(enemySpawnQueue, 0);
-            spawnTimer = 8.1f;
+            spawnTimer = 5.1f;
 		}
+        LevelClearaceCheck();
     }
 
     public Queue<GameObject> CreateSpawnQueue(int level)
@@ -38,6 +41,7 @@ public class GameManager : MonoBehaviour
         {
             int rand_num = Random.Range(0, enemyList.Count); //Generates random number.
             tempQueue.Enqueue(enemyList[rand_num]); //Add the enemy to queue.
+            spawnCount++;
             Debug.Log("Add check.");
         }
         return tempQueue;
@@ -46,7 +50,7 @@ public class GameManager : MonoBehaviour
     public bool LevelClearaceCheck()
 	{
         bool finished = false;
-        if (spawnedEnemyList.Count == 8 + 2 * level && spawnedEnemyList[8 + 2 * level - 1] == null)
+        if (this.spawnedEnemyList.Count <= 0)
 		{
             Debug.Log("Finish check.");
             finished = true;
@@ -58,20 +62,23 @@ public class GameManager : MonoBehaviour
 	{
         int rand_num = Random.Range(0, 2);
         GameObject gameObject = queue.Dequeue();
-		if (rand_num == 0)
+		if (rand_num == 0 && gameObject!= null)
         {
             GameObject createdObject = Instantiate(gameObject, new Vector3(9.1f+playerObject.transform.position.x, -2.43f, 1), gameObject.transform.rotation) as GameObject; //Creates the object.
             createdObject.GetComponent<Enemies>().GetPlayerComponent(player.gameObject); // Gets the player components.
             spawnedEnemyList.Add(createdObject);
+            spawnCount --;
         }
-		else
+		else if(gameObject != null)
         {
             GameObject createdObject = Instantiate(gameObject, new Vector3(playerObject.transform.position.x - 9.75f, -2.43f, 1), gameObject.transform.rotation) as GameObject; //Creates the object.
             createdObject.GetComponent<Enemies>().GetPlayerComponent(player.gameObject); // Gets the player components.
             spawnedEnemyList.Add(createdObject);
-
+            spawnCount--;
         }
         Debug.Log("Spawn check.");
+        if (spawnCount == 0)
+            spawner = false;
 	} 
 
     public float UpdateTimer(float timer)

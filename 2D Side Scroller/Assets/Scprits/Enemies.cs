@@ -15,5 +15,17 @@ public abstract class Enemies : MonoBehaviour
     }
     public abstract void Movement();
     public abstract void Attack();
-    public abstract void TakeHit();
+    public abstract void TakeHit(int hitPoint);
+
+    public GameObject PowerUpDrop(List<GameObject> powerupList)
+	{
+        GameObject powerUpObject = null;
+        int ran = Random.Range(0, 33);
+		if (ran > 8)
+		{
+            int rand_powerUp = Random.Range(0, powerupList.Count);
+            powerUpObject = powerupList[rand_powerUp];
+		}
+        return powerUpObject;
+	}
 }

@@ -18,6 +18,8 @@ public class Enemy3 : Enemies
     private float deadTimer = 2.0f;
     public bool isFaceRight = true;
     public LayerMask playerLayers;
+    public List<GameObject> powerUpList;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -92,14 +94,19 @@ public class Enemy3 : Enemies
         return distance;
     }
 
-    public override void TakeHit()
+    public override void TakeHit(int hitPoint)
     {
-        this.health -= 20;
+        this.health -= hitPoint;
         animator.SetTrigger("TakeHit");
         this.hitTimer = 1.5f;
         if (this.health <= 0)
         {
             enemyStates = States.DEATH;
+            GameObject powerUp = PowerUpDrop(powerUpList);
+            if (powerUp != null)
+            {
+                Instantiate(powerUp, new Vector3(this.transform.position.x, -3.7f, 1f), this.transform.rotation);
+            }
             rgb2D.velocity = new Vector2(0, 0);
             animator.SetTrigger("DeadTrigger");
         }

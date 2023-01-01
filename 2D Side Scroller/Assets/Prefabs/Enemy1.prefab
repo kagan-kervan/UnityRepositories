@@ -146,12 +146,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a01d729a8b53ec4f8443ad7ba08ceb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyStates: 0
+  player: {fileID: 0}
+  playerObject: {fileID: 0}
   health: 100
   hitPoint: 1
   speedMultiplier: 1.45
+  distance: 0
   animator: {fileID: 2103051891816470151}
-  player: {fileID: 0}
-  playerObject: {fileID: 0}
   rgb2D: {fileID: 2103051891816470144}
   AttackPoint: {fileID: 2103051892814287762}
   attackRange: 1
@@ -160,7 +162,10 @@ MonoBehaviour:
   playerLayers:
     serializedVersion: 2
     m_Bits: 8
-  enemy1States: 0
+  powerUpList:
+  - {fileID: 1600551068943417311, guid: 919c7b2c8696b1f449319285ad16e94e, type: 3}
+  - {fileID: 73572917385507451, guid: 0a053945b1e17ff4aa0d02a03e632378, type: 3}
+  - {fileID: 835822934026112850, guid: 7cdb2fdf8e1d3294db9c03eeeee617e0, type: 3}
 --- !u!95 &2103051891816470151
 Animator:
   serializedVersion: 3
