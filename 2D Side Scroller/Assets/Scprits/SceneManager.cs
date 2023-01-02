@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,15 @@ public class SceneManager : MonoBehaviour
     public GameObject[] nightBackgroundObjects;
     public Camera mainCamera;
     public GameObject playerObject;
+    public TextMeshProUGUI healthText;
+    public TextMeshProUGUI goldText;
+    public TextMeshProUGUI levelText;
+    public GameObject levelClearenceObject;
+    public GameObject specialButton1;
+    public GameObject specialButton2;
+    public GameObject special1PurchasewdText;
+    public GameObject special2PurchaseText;
+    public GameObject menuObject;
 
 
     private int skinindex;
@@ -26,6 +36,7 @@ public class SceneManager : MonoBehaviour
     void Update()
     {
         CameraTracker();
+        UpdatePlayerTexts();
     }
 
     public void BackgroundRandomizer()
@@ -87,6 +98,68 @@ public class SceneManager : MonoBehaviour
 		}
 	}
 
+    public void SetObjectActive(GameObject obj)
+	{
+        obj.SetActive(true);
+	}
+    public void SetObjectNotActive(GameObject obj)
+	{
+        obj.SetActive(false);
+	}
+
+    public void UpdateLevelText(int level)
+	{
+        levelText.text = "Level " + level + " is Complete.";
+	}
+    public void UpdatePlayerTexts()
+	{
+        healthText.text = "Health : " + playerObject.GetComponent<Player>().life;
+        goldText.text = "Gold : " + playerObject.GetComponent<Player>().gold;
+	}
+
+    public void ActivateMenu()
+	{
+        levelClearenceObject.SetActive(false);
+        menuObject.SetActive(true);
+        playerObject.SetActive(false);
+        playerObject.GetComponent<Player>().playerStates = Player.States.INMENU;
+	}
+
+    public void Special1Button()
+	{
+        Player player = playerObject.GetComponent<Player>();
+
+        if (player.gold >= 150)
+		{
+            player.PurchaseSpecial1();
+            specialButton1.SetActive(false);
+            special1PurchasewdText.SetActive(true);
+            UpdatePlayerTexts();
+        }
+    }
+    public void Special2Button()
+    {
+        Player player = playerObject.GetComponent<Player>();
+
+        if (player.gold >= 250)
+        {
+            player.PurchaseSpecial2();
+            specialButton2.SetActive(false);
+            special2PurchaseText.SetActive(true); 
+            UpdatePlayerTexts();
+        }
+    }
+
+    public void ExtraHealthButton()
+	{
+        Player player = playerObject.GetComponent<Player>();
+        if(player.gold >= 100)
+		{
+            player.PurchaseExtraHealth();
+            UpdatePlayerTexts();
+            
+		}
+	}
     public void CameraTracker()
 	{
         Vector2 playerPos = playerObject.transform.position;

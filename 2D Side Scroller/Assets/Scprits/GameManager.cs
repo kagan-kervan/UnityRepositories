@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-
+    public GameManager instance;
+    public SceneManager sceneManager;
     public List<GameObject> enemyList;
     public Queue<GameObject> enemySpawnQueue;
     public List<GameObject> spawnedEnemyList;
@@ -15,7 +16,18 @@ public class GameManager : MonoBehaviour
     public int level;
     public bool spawner = true;
     public int spawnCount;
+    public int totalEnemyCount;
 
+    private void Awake()
+    {
+        if (instance)
+            Destroy(gameObject);
+        else
+        {
+            instance = this;
+
+        }
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -31,32 +43,67 @@ public class GameManager : MonoBehaviour
             SpawnEnemy(enemySpawnQueue, 0);
             spawnTimer = 5.1f;
 		}
-        LevelClearaceCheck();
+        if (LevelClearaceCheck())
+            FinishtheLevel();
     }
 
     public Queue<GameObject> CreateSpawnQueue(int level)
 	{
+        totalEnemyCount = 0;
         Queue<GameObject> tempQueue = new Queue<GameObject>(20);
 		for (int i = 0; i < 8+2*level; i++)
         {
             int rand_num = Random.Range(0, enemyList.Count); //Generates random number.
             tempQueue.Enqueue(enemyList[rand_num]); //Add the enemy to queue.
             spawnCount++;
+            totalEnemyCount++;
             Debug.Log("Add check.");
         }
+        SpawnEnemy(tempQueue, 0);
+        spawner = true;
         return tempQueue;
 	}
 
     public bool LevelClearaceCheck()
 	{
         bool finished = false;
-        if (this.spawnedEnemyList.Count <= 0)
+        if (this.spawnedEnemyList.Count == totalEnemyCount && isListClear(spawnedEnemyList))
 		{
             Debug.Log("Finish check.");
             finished = true;
 		}
         return finished;
 	}
+
+    public void FinishtheLevel()
+	{
+        Debug.Log("Finish level debug.");
+        playerObject.GetComponent<Player>().isAbletoMove = false;
+        player.playerStates = Player.States.INMENU;
+        spawnedEnemyList.Clear();
+        enemySpawnQueue.Clear();
+        sceneManager.UpdateLevelText(level);
+        sceneManager.SetObjectActive(sceneManager.levelClearenceObject);
+	}
+    public bool isListClear(List<GameObject> givenList)
+	{
+        int count = givenList.Count;
+		for (int i = 0; i < count; i++)
+		{
+            if (givenList[i] != null)
+                return false;
+		}
+        return true;
+	}
+
+    public void CreateNewLevel()
+	{
+        level++;
+        playerObject.SetActive(true);
+        playerObject.GetComponent<Player>().ResetPositions();
+        enemySpawnQueue = CreateSpawnQueue(level);
+        sceneManager.SetObjectNotActive(sceneManager.menuObject);
+    }
 
     public void SpawnEnemy(Queue<GameObject> queue, float xrange)
 	{

@@ -14,9 +14,12 @@ public class Player : MonoBehaviour
     public float heavyAttackRange = 1.1f;
     public LayerMask enemyLayers;
     public bool isFaceRight = true;
+    public bool isAbletoMove = true;
     public Freezer freezer;
-    public enum States { BLOCKING, NORMAL, DEATH };
+    public enum States { BLOCKING, NORMAL, DEATH, INMENU };
     public States playerStates;
+    public bool hasSpecial1;
+    public bool hasSpecial2;
 
     // Start is called before the first frame update
     void Start()
@@ -28,7 +31,11 @@ public class Player : MonoBehaviour
     void Update()
     {
         float value = GetMovementValue();
+        isAbletoMove = isPlayerInBoundaries(value);
+        if (!isAbletoMove && playerStates == States.NORMAL)
             MovePlayer(value);
+        else
+            rbg2D.velocity = new Vector2(0, 0);
         if (value==0)
             animator.SetBool("MovementBool", false);
         CheckCombatInputs();
@@ -45,7 +52,7 @@ public class Player : MonoBehaviour
         float result; 
         //Gets input axis.
         result = Input.GetAxisRaw("Horizontal");
-        if (result != 0)
+        if (result != 0 && playerStates != States.INMENU)
             playerStates = States.NORMAL;
         return result;
 	}
@@ -72,6 +79,22 @@ public class Player : MonoBehaviour
 
 	}
 
+    public bool isPlayerInBoundaries(float value)
+	{
+        if (this.transform.position.x +value <= -9.3f || this.transform.position.x +value >= 32.2f)
+		{
+            value = 0f;
+            return true;
+        }
+        return false;
+	}
+
+    public void ResetPositions()
+	{
+        Vector3 oldPosition = new Vector3(4.01f, -3.22f, 1);
+        this.transform.position = oldPosition;
+        playerStates = States.NORMAL;
+	}
     public void CheckCombatInputs()
 	{
         if (Input.GetKeyDown(KeyCode.Space))
@@ -85,12 +108,12 @@ public class Player : MonoBehaviour
             Debug.Log("Heavy attack debug.");
             animator.SetTrigger("CombatTrigger2");
         }
-        else if (Input.GetButtonDown("SpecialAttack1"))
+        else if (Input.GetButtonDown("SpecialAttack1") && hasSpecial1)
         {
             PlayerCombat(25, attackRange);
             animator.SetTrigger("SpecialAttack1Trigger");
         }
-        else if (Input.GetButtonDown("SpecialAttack2"))
+        else if (Input.GetButtonDown("SpecialAttack2") && hasSpecial2)
         {
             PlayerCombat(40, attackRange);
             animator.SetTrigger("SpecialAttack2Trigger");
@@ -157,7 +180,22 @@ public class Player : MonoBehaviour
         }
 	}
 
-    
+    public void PurchaseSpecial1()
+	{
+        hasSpecial1 = true;
+        gold -= 150;
+	}
+
+    public void PurchaseSpecial2()
+	{
+        hasSpecial2 = true;
+        gold -= 250;
+    }
+    public void PurchaseExtraHealth()
+	{
+        life++;
+        gold -= 100;
+	}
 	
     public void OnDrawGizmosSelected()
 	{ //Draws attack range when the object is selected.
