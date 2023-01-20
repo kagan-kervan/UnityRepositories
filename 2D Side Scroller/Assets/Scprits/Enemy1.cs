@@ -118,7 +118,7 @@ public class Enemy1 : Enemies
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(AttackPoint.position, attackRange, playerLayers);
         foreach (Collider2D enemy in hitEnemies)
         {
-			if (hitTimer > 0 && hitCount>0)
+			if (hitTimer > 0 && hitCount>0 && player.playerStates != Player.States.DEATH)
             {
                 enemy.GetComponent<Player>().TakeHit();
                 animator.SetTrigger("CombatTrigger");

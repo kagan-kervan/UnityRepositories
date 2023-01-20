@@ -22,6 +22,8 @@ public class SceneManager : MonoBehaviour
     public GameObject special1PurchasewdText;
     public GameObject special2PurchaseText;
     public GameObject menuObject;
+    public GameObject gameOverObject;
+    public TextMeshProUGUI scoreText;
 
 
     private int skinindex;
@@ -122,9 +124,17 @@ public class SceneManager : MonoBehaviour
         levelClearenceObject.SetActive(false);
         menuObject.SetActive(true);
         playerObject.SetActive(false);
+        SetObjectActive(healthText.gameObject);
         playerObject.GetComponent<Player>().playerStates = Player.States.INMENU;
 	}
-
+    public void ActivateGameOverMenu()
+	{
+        Player pl = playerObject.GetComponent<Player>();
+        gameOverObject.SetActive(true);
+        healthText.gameObject.SetActive(false);
+        int score = (int)(pl.gold * 4 + 200);
+        scoreText.text = "Your Score : " + score;
+	}
     public void Special1Button()
 	{
         Player player = playerObject.GetComponent<Player>();
@@ -136,6 +146,13 @@ public class SceneManager : MonoBehaviour
             special1PurchasewdText.SetActive(true);
             UpdatePlayerTexts();
         }
+    }
+    public void ResetButtons()
+	{
+        SetObjectActive(specialButton1);
+        SetObjectActive(specialButton2);
+        SetObjectNotActive(special1PurchasewdText);
+        SetObjectNotActive(special2PurchaseText);
     }
     public void Special2Button()
     {

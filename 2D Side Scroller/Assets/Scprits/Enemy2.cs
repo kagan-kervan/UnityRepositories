@@ -70,7 +70,7 @@ public class Enemy2 : Enemies
     }
     public override void Attack()
 	{
-		if(hitTimer <= 0)
+		if(hitTimer <= 0 && player.playerStates != Player.States.DEATH)
 		{
             Vector3 missilePos = transform.position;
             if (missileBehaviour.isFiringRight)

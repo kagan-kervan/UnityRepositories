@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     public float attackTime = 1.2f;
     public int level;
     public bool spawner = true;
+    public bool created = false;
     public int spawnCount;
     public int totalEnemyCount;
 
@@ -38,13 +39,19 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         spawnTimer = UpdateTimer(spawnTimer);
-        if(this.spawnTimer<= 0f && spawner)
+        if (LevelClearaceCheck())
+            FinishtheLevel();
+        if (this.spawnTimer<= 0f && spawner)
 		{
             SpawnEnemy(enemySpawnQueue, 0);
             spawnTimer = 5.1f;
 		}
-        if (LevelClearaceCheck())
-            FinishtheLevel();
+		if (player.isDead())
+		{
+            player.ActivateDeathState();
+            sceneManager.ActivateGameOverMenu();
+            created = false;
+		}
     }
 
     public Queue<GameObject> CreateSpawnQueue(int level)
@@ -59,6 +66,7 @@ public class GameManager : MonoBehaviour
             totalEnemyCount++;
             Debug.Log("Add check.");
         }
+        created = true;
         SpawnEnemy(tempQueue, 0);
         spawner = true;
         return tempQueue;
@@ -67,7 +75,7 @@ public class GameManager : MonoBehaviour
     public bool LevelClearaceCheck()
 	{
         bool finished = false;
-        if (this.spawnedEnemyList.Count == totalEnemyCount && isListClear(spawnedEnemyList))
+        if (this.spawnedEnemyList.Count == totalEnemyCount && isListClear(spawnedEnemyList) && created)
 		{
             Debug.Log("Finish check.");
             finished = true;
@@ -97,7 +105,7 @@ public class GameManager : MonoBehaviour
 	}
 
     public void CreateNewLevel()
-	{
+    {
         level++;
         playerObject.SetActive(true);
         playerObject.GetComponent<Player>().ResetPositions();
@@ -106,7 +114,9 @@ public class GameManager : MonoBehaviour
     }
 
     public void SpawnEnemy(Queue<GameObject> queue, float xrange)
-	{
+    {
+        if (!created)
+            return;
         int rand_num = Random.Range(0, 2);
         GameObject gameObject = queue.Dequeue();
 		if (rand_num == 0 && gameObject!= null)
@@ -128,6 +138,31 @@ public class GameManager : MonoBehaviour
             spawner = false;
 	} 
 
+    public void RestartGame()
+	{
+        level = 1;
+        player.ResetAblities();
+        ClearTheLevel();
+        player.animator.SetBool("DeadBool", false);
+        sceneManager.SetObjectNotActive(sceneManager.gameOverObject);
+        sceneManager.SetObjectActive(sceneManager.healthText.gameObject);
+        sceneManager.ResetButtons();
+        sceneManager.ActivateMenu();
+	}
+
+    public void ClearTheLevel()
+	{
+		for (int i = 0; i < spawnedEnemyList.Count; i++)
+		{
+            GameObject obj = spawnedEnemyList[i];
+            if(obj!= null)
+			{
+                Destroy(obj);
+			}
+		}
+        spawnedEnemyList.Clear();
+        enemySpawnQueue.Clear();
+	}
     public float UpdateTimer(float timer)
 	{
         float temp_timer = timer - Time.deltaTime;

@@ -89,6 +89,24 @@ public class Player : MonoBehaviour
         return false;
 	}
 
+    public bool isDead()
+	{
+        return life <= 0;
+	}
+    public void ActivateDeathState()
+	{
+
+        animator.SetBool("DeadBool", true);
+        playerStates = States.DEATH;
+    }
+
+    public void ResetAblities()
+	{
+        life = 5;
+        gold = 0;
+        hasSpecial1 = false;
+        hasSpecial2 = false;
+	}
     public void ResetPositions()
 	{
         Vector3 oldPosition = new Vector3(4.01f, -3.22f, 1);
