@@ -135,6 +135,10 @@ public class SceneManager : MonoBehaviour
         int score = (int)(pl.gold * 4 + 200);
         scoreText.text = "Your Score : " + score;
 	}
+    public void DeactivateGameOverMenu()
+    {
+        SetObjectNotActive(gameOverObject);
+    }
     public void Special1Button()
 	{
         Player player = playerObject.GetComponent<Player>();

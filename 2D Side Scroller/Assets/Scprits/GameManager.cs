@@ -18,9 +18,11 @@ public class GameManager : MonoBehaviour
     public bool created = false;
     public int spawnCount;
     public int totalEnemyCount;
+    public GameObject highScoreObject;
 
     private void Awake()
     {
+        Screen.SetResolution(1366, 768, true);
         if (instance)
             Destroy(gameObject);
         else
@@ -162,6 +164,19 @@ public class GameManager : MonoBehaviour
 		}
         spawnedEnemyList.Clear();
         enemySpawnQueue.Clear();
+	}
+    public void OpenHighScoreTable()
+    {
+        ClearTheLevel();
+        sceneManager.DeactivateGameOverMenu();
+        this.GetComponent<HighScore>().AddPlayertoHighScore((int)player.gold * 4 * level + 200, "Player");
+        this.GetComponent<HighScore>().CreateList();
+        highScoreObject.SetActive(true);
+	}
+    public void GotoMenu()
+	{
+        highScoreObject.SetActive(false);
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Menu");
 	}
     public float UpdateTimer(float timer)
 	{
