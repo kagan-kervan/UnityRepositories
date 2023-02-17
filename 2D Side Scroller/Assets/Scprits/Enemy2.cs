@@ -125,6 +125,7 @@ public class Enemy2 : Enemies
         this.health -= hitPoint;
         this.hitTimer = 1.3f;
         animator.SetTrigger("TakeHit");
+        audioSource.PlayOneShot(enemyHitSound);
         if (this.health <= 0)
         {
             enemyStates = States.DEATH;
@@ -135,6 +136,7 @@ public class Enemy2 : Enemies
             }
             rgb2D.velocity = new Vector2(0, 0);
             animator.SetTrigger("DeadTrigger");
+            audioSource.PlayOneShot(enemyDeathSound);
         }
     }
 }

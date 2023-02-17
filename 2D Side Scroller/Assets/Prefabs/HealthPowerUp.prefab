@@ -113,3 +113,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powerUp: {fileID: 11400000, guid: 2c1951a9e68ff714aa1992131f34aca8, type: 2}
+  powerSFX: {fileID: 8300000, guid: 57c315cebaf62ad40937ff8893cd626b, type: 3}

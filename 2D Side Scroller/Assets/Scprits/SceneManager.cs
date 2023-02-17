@@ -23,7 +23,10 @@ public class SceneManager : MonoBehaviour
     public GameObject special2PurchaseText;
     public GameObject menuObject;
     public GameObject gameOverObject;
+    public GameObject levelMusicObject;
     public TextMeshProUGUI scoreText;
+    public AudioSource audioSource;
+    public AudioClip buySFX;
 
 
     private int skinindex;
@@ -126,6 +129,8 @@ public class SceneManager : MonoBehaviour
         playerObject.SetActive(false);
         SetObjectActive(healthText.gameObject);
         playerObject.GetComponent<Player>().playerStates = Player.States.INMENU;
+        SetObjectNotActive(levelMusicObject);
+
 	}
     public void ActivateGameOverMenu()
 	{
@@ -134,7 +139,8 @@ public class SceneManager : MonoBehaviour
         healthText.gameObject.SetActive(false);
         int score = (int)(pl.gold * 4 + 200);
         scoreText.text = "Your Score : " + score;
-	}
+        SetObjectNotActive(levelMusicObject);
+    }
     public void DeactivateGameOverMenu()
     {
         SetObjectNotActive(gameOverObject);
@@ -148,6 +154,7 @@ public class SceneManager : MonoBehaviour
             player.PurchaseSpecial1();
             specialButton1.SetActive(false);
             special1PurchasewdText.SetActive(true);
+            audioSource.PlayOneShot(buySFX);
             UpdatePlayerTexts();
         }
     }
@@ -166,7 +173,8 @@ public class SceneManager : MonoBehaviour
         {
             player.PurchaseSpecial2();
             specialButton2.SetActive(false);
-            special2PurchaseText.SetActive(true); 
+            special2PurchaseText.SetActive(true);
+            audioSource.PlayOneShot(buySFX);
             UpdatePlayerTexts();
         }
     }
@@ -177,6 +185,7 @@ public class SceneManager : MonoBehaviour
         if(player.gold >= 100)
 		{
             player.PurchaseExtraHealth();
+            audioSource.PlayOneShot(buySFX);
             UpdatePlayerTexts();
             
 		}

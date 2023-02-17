@@ -20,6 +20,11 @@ public class Player : MonoBehaviour
     public States playerStates;
     public bool hasSpecial1;
     public bool hasSpecial2;
+    public AudioSource audioSource;
+    public AudioClip playerSwingSFX;
+    public AudioClip playerHitSFX;
+    public AudioClip playerDeathSFX;
+
 
     // Start is called before the first frame update
     void Start()
@@ -80,7 +85,12 @@ public class Player : MonoBehaviour
 	}
 
     public bool isPlayerInBoundaries(float value)
-	{
+    {
+        if (life <= 0)
+		{
+            playerStates = States.DEATH;
+            return true;
+		}
         if (this.transform.position.x +value <= -9.3f || this.transform.position.x +value >= 32.2f)
 		{
             value = 0f;
@@ -115,6 +125,8 @@ public class Player : MonoBehaviour
 	}
     public void CheckCombatInputs()
 	{
+        if (playerStates == States.DEATH)
+            return;
         if (Input.GetKeyDown(KeyCode.Space))
         {
             PlayerCombat(20, attackRange);
@@ -123,7 +135,6 @@ public class Player : MonoBehaviour
         else if (Input.GetButtonDown("Fire1"))
         {
             PlayerCombat(30, heavyAttackRange);
-            Debug.Log("Heavy attack debug.");
             animator.SetTrigger("CombatTrigger2");
         }
         else if (Input.GetButtonDown("SpecialAttack1") && hasSpecial1)
@@ -161,8 +172,8 @@ public class Player : MonoBehaviour
         rbg2D.velocity = velocity;
         //Detects the enemies in the attack range.
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(AttackPoint.position, attackRange, enemyLayers);
-
-        foreach(Collider2D enemy in hitEnemies)
+        audioSource.PlayOneShot(playerSwingSFX);
+        foreach (Collider2D enemy in hitEnemies)
 		{
             if (enemy.GetComponent<Enemies>().enemyStates!=Enemy1.States.DEATH)
                 enemy.GetComponent<Enemies>().TakeHit(hitPoint);
@@ -193,6 +204,7 @@ public class Player : MonoBehaviour
             this.life--;
             freezer.Freeze();
             animator.SetTrigger("HitTrigger");
+            audioSource.PlayOneShot(playerHitSFX);
             if (this.life <= 0)
                 Debug.Log("Dead Check.");
         }

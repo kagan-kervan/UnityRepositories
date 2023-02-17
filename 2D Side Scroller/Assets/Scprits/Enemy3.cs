@@ -98,6 +98,7 @@ public class Enemy3 : Enemies
     {
         this.health -= hitPoint;
         animator.SetTrigger("TakeHit");
+        audioSource.PlayOneShot(enemyHitSound);
         this.hitTimer = 1.5f;
         if (this.health <= 0)
         {
@@ -109,6 +110,7 @@ public class Enemy3 : Enemies
             }
             rgb2D.velocity = new Vector2(0, 0);
             animator.SetTrigger("DeadTrigger");
+            audioSource.PlayOneShot(enemyDeathSound);
         }
 
     }

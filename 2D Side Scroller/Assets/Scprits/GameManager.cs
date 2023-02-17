@@ -113,6 +113,7 @@ public class GameManager : MonoBehaviour
         playerObject.GetComponent<Player>().ResetPositions();
         enemySpawnQueue = CreateSpawnQueue(level);
         sceneManager.SetObjectNotActive(sceneManager.menuObject);
+        sceneManager.SetObjectActive(sceneManager.levelMusicObject);
     }
 
     public void SpawnEnemy(Queue<GameObject> queue, float xrange)
@@ -165,11 +166,11 @@ public class GameManager : MonoBehaviour
         spawnedEnemyList.Clear();
         enemySpawnQueue.Clear();
 	}
-    public void OpenHighScoreTable()
+    public void OpenHighScoreTable(string s)
     {
         ClearTheLevel();
         sceneManager.DeactivateGameOverMenu();
-        this.GetComponent<HighScore>().AddPlayertoHighScore((int)player.gold * 4 * level + 200, "Player");
+        this.GetComponent<HighScore>().AddPlayertoHighScore((int)player.gold * 4 * level + 200, s);
         this.GetComponent<HighScore>().CreateList();
         highScoreObject.SetActive(true);
 	}

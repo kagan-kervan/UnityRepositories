@@ -8,6 +8,9 @@ public abstract class Enemies : MonoBehaviour
     public States enemyStates;
     public Player player;
     public GameObject playerObject;
+    public AudioSource audioSource;
+    public AudioClip enemyHitSound;
+    public AudioClip enemyDeathSound;
     public void GetPlayerComponent(GameObject obj) //Use it when you create this objects in game mangaer.
     {
         player = obj.GetComponent<Player>();
