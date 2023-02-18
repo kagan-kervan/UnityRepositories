@@ -14,7 +14,6 @@ public class Missile : MonoBehaviour
     {
         if (isFiringRight == true)
         {
-            Debug.Log("Move left Check.");
             transform.position += transform.right * moveSpeed * Time.deltaTime;
         }
 		else
@@ -22,7 +21,6 @@ public class Missile : MonoBehaviour
             Vector3 newPos = transform.position;
             newPos.x += -Mathf.Abs(transform.position.x * moveSpeed * Time.deltaTime)/5;
             transform.position = newPos;
-            Debug.Log("Move right Check.");
         }
 
         if (transform.position.x > 120 || transform.position.x < -120)

@@ -33,7 +33,6 @@ public class SceneManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     { 
-       BackgroundRandomizer();
         TileDrawing(-18f, -4.3f, 1f);
     }
 

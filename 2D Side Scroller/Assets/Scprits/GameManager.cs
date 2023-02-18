@@ -66,7 +66,6 @@ public class GameManager : MonoBehaviour
             tempQueue.Enqueue(enemyList[rand_num]); //Add the enemy to queue.
             spawnCount++;
             totalEnemyCount++;
-            Debug.Log("Add check.");
         }
         created = true;
         SpawnEnemy(tempQueue, 0);
@@ -109,6 +108,7 @@ public class GameManager : MonoBehaviour
     public void CreateNewLevel()
     {
         level++;
+        sceneManager.BackgroundRandomizer();
         playerObject.SetActive(true);
         playerObject.GetComponent<Player>().ResetPositions();
         enemySpawnQueue = CreateSpawnQueue(level);
