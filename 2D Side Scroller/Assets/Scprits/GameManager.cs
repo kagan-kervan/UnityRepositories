@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     public int spawnCount;
     public int totalEnemyCount;
     public GameObject highScoreObject;
+    public HighScore highScore;
 
     private void Awake()
     {
@@ -34,6 +35,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if(!PlayerPrefs.HasKey("HighScoreCreation"))
+            PlayerPrefs.SetInt("HighScoreCreation", 0);
         enemySpawnQueue = CreateSpawnQueue(level);
     }
 
@@ -169,11 +172,16 @@ public class GameManager : MonoBehaviour
     public void OpenHighScoreTable(string s)
     {
         ClearTheLevel();
-        sceneManager.DeactivateGameOverMenu();
-        this.GetComponent<HighScore>().AddPlayertoHighScore((int)player.gold * 4 * level + 200, s);
-        this.GetComponent<HighScore>().CreateList();
-        highScoreObject.SetActive(true);
+        highScore.AddPlayertoHighScore((int)player.gold * 4 * level + 200, s);
+        highScore.CreateList();
 	}
+
+    public void QuitgameoverMenu()
+	{
+
+        sceneManager.DeactivateGameOverMenu();
+        highScoreObject.SetActive(true);
+    }
     public void GotoMenu()
 	{
         highScoreObject.SetActive(false);
