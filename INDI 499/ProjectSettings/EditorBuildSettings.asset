@@ -6,6 +6,15 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
+    path: Assets/Scenes/MENU.unity
+    guid: 79f94e3ff9ac9a24d8fa30f13d224257
+  - enabled: 1
+    path: Assets/Scenes/INDYTRACK.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/ISTPARK.unity
+    guid: 29455913fefd10f45ba2754453e49a67
+  - enabled: 1
+    path: Assets/Scenes/SINGAPORE.unity
+    guid: 03483a0fab6de4a4bad3047cfd9657a5
   m_configObjects: {}

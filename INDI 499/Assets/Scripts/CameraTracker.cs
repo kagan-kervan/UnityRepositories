@@ -9,6 +9,7 @@ public class CameraTracker : MonoBehaviour
     public Player player2;
     public Vector3 initialPos;
     public Camera mainCam;
+    public SceneManager manager;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,20 +27,31 @@ public class CameraTracker : MonoBehaviour
     }
 
     public void ChangeCameraPosition()
-	{
-        Vector3 player1pos = player1.transform.position;
-        Vector3 player2pos = player2.transform.position;
+    {
         Vector3 camPos;
-        if (player1pos.y <= player2pos.y)
-            camPos.y = player1pos.y - 2.0f;
-        else
-            camPos.y = player2pos.y - 2.0f;
-        if (player1pos.x <= player2pos.x)
-            camPos.x = player2pos.x - 2.0f;
-        else
-            camPos.x = player1pos.x - 2.0f;
-        camPos.z = -10f;
-        mainCam.gameObject.transform.position = camPos;
+        Vector3 player1pos = player1.transform.position;
+		if (PlayerPrefs.GetString("PlayerMode") == "F")
+		{
+            camPos = player1pos;
+            camPos.z = -10f;
+            mainCam.gameObject.transform.position = camPos;
+
+        }
+		else
+        {
+            Vector3 player2pos = player2.transform.position;
+            if (player1pos.y <= player2pos.y)
+                camPos.y = player1pos.y - 2.0f;
+            else
+                camPos.y = player2pos.y - 2.0f;
+            if (player1pos.x <= player2pos.x)
+                camPos.x = player2pos.x - 2.0f;
+            else
+                camPos.x = player1pos.x - 2.0f;
+            camPos.z = -10f;
+            mainCam.gameObject.transform.position = camPos;
+
+        }
             
 
 	}

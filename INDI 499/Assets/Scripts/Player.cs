@@ -16,6 +16,8 @@ public class Player : MonoBehaviour
     public float accelerationFactor;
     public float turnFactor = 3.5f;
 
+    //Visual components.
+    public GameObject[] carSprites;
 
     //Local Components.
     float accelerationInput = 0;
@@ -23,6 +25,14 @@ public class Player : MonoBehaviour
     float rotationAngle = 0;
 
 
+	private void OnEnable()
+	{
+		if (players == State.Player1)
+        {
+            SetUpCarSprite(PlayerPrefs.GetInt("CarSelect"));
+
+        }
+	}
 	private void Awake()
 	{
         rgb2D = GetComponent<Rigidbody2D>();
@@ -97,6 +107,17 @@ public class Player : MonoBehaviour
 
         steeringInput = inputVec.x;
         accelerationInput = inputVec.y;
+	}
+
+    public void SetUpCarSprite(int num)
+	{
+		for (int i = 0; i < carSprites.Length; i++)
+		{
+            if (i == num)
+                carSprites[i].gameObject.SetActive(true);
+            else
+                carSprites[i].gameObject.SetActive(false);
+		}
 	}
 
     public string GetState()
