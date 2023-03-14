@@ -14,6 +14,9 @@ public class SceneManager : MonoBehaviour
     public TextMeshProUGUI endGametimerText;
     public bool isPL2Active;
     public float timer;
+    // Variables for pause menu.
+    public bool isPaused;
+    public GameObject pauseMenuObject;
 
     // Start is called before the first frame update
     void Start()
@@ -26,6 +29,7 @@ public class SceneManager : MonoBehaviour
     void Update()
     {
         UpdateTimer(Time.deltaTime);
+        PauseInputChecker();
     }
     public void ActivateGameOverMenu()
 	{
@@ -37,6 +41,35 @@ public class SceneManager : MonoBehaviour
         pl2Object.SetActive(false);
         timerText.gameObject.SetActive(false);
 	}
+
+    public void PauseInputChecker()
+	{
+		if (Input.GetKeyDown(KeyCode.Escape))
+		{
+			if (isPaused)
+			{
+                UnPauseGame();
+			}
+			else
+			{
+                isPaused = true;
+                tileObject.SetActive(false);
+                finishLineObj.SetActive(false);
+                pauseMenuObject.SetActive(true);
+                Time.timeScale = 0;
+			}
+		}
+	}
+
+    public void UnPauseGame()
+	{
+
+        isPaused = false;
+        tileObject.SetActive(true);
+        finishLineObj.SetActive(true);
+        pauseMenuObject.SetActive(false);
+        Time.timeScale = 1;
+    }
 
     public void StartLevel()
 	{

@@ -17,7 +17,6 @@ public class MenuManager : MonoBehaviour
         Screen.SetResolution(1366, 768, true);
         PlayerPrefs.SetString("PlayerMode", "F");
         carSelectionNum = 0; 
-        PlayerPrefs.SetInt("CarSelect", carSelectionNum);
         trackSelectionNum = 0;
     }
 
@@ -33,7 +32,6 @@ public class MenuManager : MonoBehaviour
 	{
         carSelectionNum++;
         carSelectionNum = carSelectionNum % 4;
-        PlayerPrefs.SetInt("CarSelect", carSelectionNum);
 	}
 
     public void UpdateTrackSelection()
@@ -106,7 +104,9 @@ public class MenuManager : MonoBehaviour
 
     public void StartTheGame()
 	{
-		switch (trackSelectionNum)
+
+        PlayerPrefs.SetInt("CarSelect", carSelectionNum);
+        switch (trackSelectionNum)
 		{
             case 0:
                 UnityEngine.SceneManagement.SceneManager.LoadScene("INDYTRACK");
