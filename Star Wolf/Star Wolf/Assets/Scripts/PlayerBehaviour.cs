@@ -32,7 +32,7 @@ public class PlayerBehaviour : MonoBehaviour
 
     private void Movement(float horizontalValue,float verticalValue, float time)
 	{
-        Vector3 forceVector = new Vector3(horizontalValue * speedMultiplier , verticalValue * speedMultiplier , speedMultiplier/4);
+        Vector3 forceVector = new Vector3(horizontalValue * speedMultiplier , verticalValue * speedMultiplier , 0);
         if(isInsidetheCoordinate(horizontalValue * speedMultiplier*time, verticalValue * speedMultiplier*time))
             this.transform.Translate(forceVector * time);
 	}

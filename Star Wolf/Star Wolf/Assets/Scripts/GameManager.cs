@@ -6,7 +6,9 @@ public class GameManager : MonoBehaviour
 {
     public PlayerBehaviour player;
     public BulletBehaviour bullet;
+    public GameObject[] enemyObjects;
     public float firingDelay = 0.3f;
+    public float spawnTimer = 5.0f;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,6 +20,13 @@ public class GameManager : MonoBehaviour
     {
         CheckforInputs();
         firingDelay = UpdateTime(firingDelay, Time.deltaTime);
+        spawnTimer = UpdateTime(spawnTimer, Time.deltaTime);
+		if (spawnTimer <= 0)
+		{
+            int random = Random.Range(0, 2);
+            spawnTimer = 5.0f;
+            EnemySpawner(enemyObjects[random]);
+        }
     }
     public void InstantiateBullet()
     {
@@ -27,6 +36,12 @@ public class GameManager : MonoBehaviour
         GameObject tempBullet = Instantiate(bullet.gameObject, pos, bullet.transform.rotation);
         //Attaches player object.
         tempBullet.GetComponent<BulletBehaviour>().InstantitePlayerObject(player.gameObject);
+        //Adjusts x-axis for second bullet
+        pos.x = player.gameObject.transform.position.x + 0.9f;
+        GameObject tempBullet2 = Instantiate(bullet.gameObject, pos, bullet.transform.rotation);
+        //Attaches player object.
+        tempBullet2.GetComponent<BulletBehaviour>().InstantitePlayerObject(player.gameObject);
+        
     }
     public void CheckforInputs()
 	{
@@ -43,4 +58,15 @@ public class GameManager : MonoBehaviour
         time = time - deltaTime;
         return time;
 	}
+
+    public void EnemySpawner(GameObject obj)
+    {
+        float x_axis = Random.Range(-36.0f, 36.0f);
+        float y_axis = Random.Range(-25.0f, 25.0f);
+        float z_axis = player.gameObject.transform.position.z + 150;
+        Vector3 spawnPos = new Vector3(x_axis, y_axis, z_axis);
+        GameObject enemyObj = Instantiate(obj, spawnPos, obj.transform.rotation);
+        enemyObj.GetComponent<EnemyBehaviour>().InstantitePlayerObject(player.gameObject);
+	}
+        
 }

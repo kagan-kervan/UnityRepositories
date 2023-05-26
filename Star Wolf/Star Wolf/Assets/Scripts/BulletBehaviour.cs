@@ -46,5 +46,9 @@ public class BulletBehaviour : MonoBehaviour
 	public void OnCollisionEnter(Collision collision)
 	{
         Debug.Log("Collision enter.");
+        if(collision.collider.GetComponent<EnemyBehaviour>()!= null)
+		{
+            collision.collider.GetComponent<EnemyBehaviour>().TakeDamage();
+		}
 	}
 }
