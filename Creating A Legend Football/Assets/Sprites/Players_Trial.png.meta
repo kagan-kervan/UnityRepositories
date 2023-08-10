@@ -1,22 +1,7 @@
 fileFormatVersion: 2
-guid: b1c3a19ee71e9044eb2d630ec8eefe0b
+guid: 3e57032aca8afc24789fd18849984591
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: 5325316716852801847
-    second: INDY 500-CARS_0
-  - first:
-      213: -8239958139231671047
-    second: INDY 500-CARS_1
-  - first:
-      213: -1026019751805366953
-    second: INDY 500-CARS_2
-  - first:
-      213: 3825531888726084293
-    second: INDY 500-CARS_3
-  - first:
-      213: -6033245194041127912
-    second: INDY 500-CARS_4
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 12
   mipmaps:
@@ -49,7 +34,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -63,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 180
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -80,7 +65,7 @@ TextureImporter:
   ignorePngGamma: 0
   applyGammaDecoding: 0
   swizzle: 50462976
-  cookieLightType: 1
+  cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -109,7 +94,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
-    buildTarget: WebGL
+    buildTarget: Server
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -135,7 +120,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
-    buildTarget: Server
+    buildTarget: WebGL
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -151,13 +136,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: INDY 500-CARS_0
+      name: Players_Trial_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 180
-        height: 180
+        width: 8
+        height: 8
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -165,20 +150,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 731f578d65357e940800000000000000
-      internalID: 5325316716852801847
+      spriteID: a4ea83d6d6439af4392ca744828b7852
+      internalID: -1768750824
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: INDY 500-CARS_1
+      name: Players_Trial_1
       rect:
         serializedVersion: 2
-        x: 180
+        x: 8
         y: 0
-        width: 180
-        height: 180
+        width: 8
+        height: 8
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -186,20 +171,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9fce103cab9c5ad80800000000000000
-      internalID: -8239958139231671047
+      spriteID: 3e9135a1e36a6194ca0cc80e333db522
+      internalID: -1130448506
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: INDY 500-CARS_2
+      name: Players_Trial_2
       rect:
         serializedVersion: 2
-        x: 360
+        x: 16
         y: 0
-        width: 180
-        height: 180
+        width: 8
+        height: 8
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -207,50 +192,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 75d4b19c878d2c1f0800000000000000
-      internalID: -1026019751805366953
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: INDY 500-CARS_3
-      rect:
-        serializedVersion: 2
-        x: 540
-        y: 0
-        width: 180
-        height: 180
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5ca8278fbf4071530800000000000000
-      internalID: 3825531888726084293
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: INDY 500-CARS_4
-      rect:
-        serializedVersion: 2
-        x: 720
-        y: 0
-        width: 180
-        height: 180
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 81c8856267b954ca0800000000000000
-      internalID: -6033245194041127912
+      spriteID: 185fab636c9801747858be9252a18016
+      internalID: 542328973
       vertices: []
       indices: 
       edges: []
@@ -266,11 +209,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      INDY 500-CARS_0: 5325316716852801847
-      INDY 500-CARS_1: -8239958139231671047
-      INDY 500-CARS_2: -1026019751805366953
-      INDY 500-CARS_3: 3825531888726084293
-      INDY 500-CARS_4: -6033245194041127912
+      Players_Trial_0: -1768750824
+      Players_Trial_1: -1130448506
+      Players_Trial_2: 542328973
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
