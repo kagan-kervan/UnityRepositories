@@ -10,22 +10,34 @@ public class GridMap : MonoBehaviour
     public int height;
     public int inBoardVerticalWalls;
     public int inBoardHorizontalWalls;
-    private GridSystem grid;
+    public GridSystem grid;
     public Tilemap tileMap;
     public TileBase horizontalWallTile;
     public TileBase verticalWallTile;
+    public GameObject playerObj;
+    public int[,] gridArray;
 
-    // Start is called before the first frame update
-    void Start()
+	private void Awake()
+	{
+
+        grid.SetUpNewGrid(width, height);
+        gridArray = grid.getArray();
+
+    }
+
+	// Start is called before the first frame update
+	void Start()
     {
-        grid = new GridSystem(width, height, 16f);
         CreateMap();
+        CreatePlayer();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        moveTimer = UpdateTime(moveTimer);
+        if (moveTimer <= 0)
+            CheckForInputs();
     }
 
     public void CreateMap()
@@ -76,13 +88,13 @@ public class GridMap : MonoBehaviour
 		for (int i = 0; i < 4; i++)
 		{
             //Sets up the other half.
-            tileMap.SetTile(new Vector3Int(midPointhorizontal-2,midPointVertical-i,0),tile);
-            tileMap.SetTile(new Vector3Int(midPointhorizontal + 2, midPointVertical - i, 0), tile);
+            SetWall(midPointhorizontal - 2, midPointVertical + i,tile);
+            SetWall(midPointhorizontal + 2, midPointVertical + i, tile);
         }
 		for (int i = 0; i < 2; i++)
 		{
-            tileMap.SetTile(new Vector3Int(midPointhorizontal + i, midPointVertical, 0), tile); 
-            tileMap.SetTile(new Vector3Int(midPointhorizontal - i, midPointVertical, 0), tile);
+            SetWall(midPointhorizontal + i, midPointVertical, tile);
+            SetWall(midPointhorizontal - i, midPointVertical, tile);
         }
 	}
 
@@ -181,5 +193,120 @@ public class GridMap : MonoBehaviour
 			}
 		}
     }
+
+    public void CreatePlayer()
+	{
+        Vector3 playerPos = new Vector3(-0.5f, -6.5f, 0);
+        playerObj = Instantiate(playerObj, playerPos, playerObj.transform.rotation) as GameObject;
+        grid.setValue(10, 1, 2);
+        playerObj.GetComponent<Player>().SetGridSystem(this.gameObject.GetComponent<GridMap>());
+        playerObj.GetComponent<Player>().SetCoordinates(10, 1);
+    }
+
+
+    //      ### PLAYER SCRIPT  ###
+
+    private float moveTimer = 0f;
+    
+    private Player.Direction movementDirection;
+    private float UpdateTime(float moveTimer)
+    {
+        moveTimer = moveTimer - Time.deltaTime;
+        return moveTimer;
+    }
+    public void CheckForInputs()
+    {
+        Player.Direction tempdir = Player.Direction.NEUTRAL;
+        if (Input.GetAxisRaw("Vertical") > 0)
+            tempdir = Player.Direction.UP;
+        else if (Input.GetAxisRaw("Vertical") < 0)
+            tempdir = Player.Direction.DOWN;
+        else if (Input.GetAxisRaw("Horizontal") < 0)
+            tempdir = Player.Direction.LEFT;
+        else if (Input.GetAxisRaw("Horizontal") > 0)
+            tempdir = Player.Direction.RIGHT;
+        if (tempdir != Player.Direction.NEUTRAL)
+        {
+            Vector2Int temp = playerObj.GetComponent<Player>().getCoordinates();
+            bool isPossible = isMovementPossible(tempdir,temp);
+            if (isPossible)
+            {
+                MovePlayer(tempdir,temp);
+                moveTimer = 0.32f;
+            }
+        }
+    }
+
+    private bool isMovementPossible(Player.Direction dir, Vector2Int coordinate)
+    {
+        bool flag;
+        switch (dir)
+        {
+            case Player.Direction.DOWN:
+                Debug.Log(grid.getValue(coordinate.x, coordinate.y - 1));
+                if (grid.getValue(coordinate.x, coordinate.y - 1) != 0)
+                    flag = false;
+                else
+                    flag = true;
+                break;
+            case Player.Direction.UP:
+                Debug.Log(grid.getValue(coordinate.x, coordinate.y + 1));
+                if (grid.getValue(coordinate.x, coordinate.y + 1) != 0)
+                    flag = false;
+                else
+                    flag = true;
+                break;
+            case Player.Direction.RIGHT:
+                Debug.Log(grid.getValue(coordinate.x + 1, coordinate.y));
+                if (grid.getValue(coordinate.x + 1, coordinate.y) != 0)
+                    flag = false;
+                else
+                    flag = true;
+                break;
+            case Player.Direction.LEFT:
+                Debug.Log(grid.getValue(coordinate.x - 1, coordinate.y));
+                if (grid.getValue(coordinate.x - 1, coordinate.y )!= 0)
+                    flag = false;
+                else
+                    flag = true;
+                break;
+            default:
+                flag = false;
+                break;
+        }
+        return flag;
+    }
+
+    private void MovePlayer(Player.Direction dir, Vector2Int coordinate)
+    {
+        grid.setValue(coordinate.x, coordinate.y, 0); //Clears the previous spot.
+        switch (dir)
+        {
+            case Player.Direction.DOWN:
+                coordinate.y--;
+                break;
+            case Player.Direction.UP:
+                coordinate.y++;
+                break;
+            case Player.Direction.RIGHT:
+                coordinate.x++;
+                break;
+            case Player.Direction.LEFT:
+                coordinate.x--;
+                break;
+        }
+        playerObj.GetComponent<Player>().movementDirection = dir;
+        grid.setValue(coordinate.x, coordinate.y, 2); //Sets the value for currrent position.
+        playerObj.GetComponent<Player>().MovePlayerFromScene();
+        playerObj.GetComponent<Player>().ChangePlayerSprite();
+        playerObj.GetComponent<Player>().SetCoordinates(coordinate.x, coordinate.y);
+
+    }
+
+    
+
+
+
+    //      ###  PLAYER SCRIPT  ### 
 
 }

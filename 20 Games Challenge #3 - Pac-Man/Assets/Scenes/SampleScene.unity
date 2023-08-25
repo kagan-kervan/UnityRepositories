@@ -159,7 +159,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.40530434, g: 0.40911156, b: 0.41509432, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -226,6 +226,7 @@ GameObject:
   - component: {fileID: 1082039506}
   - component: {fileID: 1082039505}
   - component: {fileID: 1082039504}
+  - component: {fileID: 1082039508}
   - component: {fileID: 1082039507}
   m_Layer: 0
   m_Name: Grid
@@ -250,9 +251,11 @@ MonoBehaviour:
   height: 16
   inBoardVerticalWalls: 8
   inBoardHorizontalWalls: 8
+  grid: {fileID: 1082039508}
   tileMap: {fileID: 1636033025}
   horizontalWallTile: {fileID: 11400000, guid: 4254d28f0aabeb94297fbbe65b7df9a0, type: 2}
   verticalWallTile: {fileID: 11400000, guid: 4254d28f0aabeb94297fbbe65b7df9a0, type: 2}
+  playerObj: {fileID: 8537634456682179469, guid: f748504e6c64ee540b642e3b071c3e66, type: 3}
 --- !u!156049354 &1082039505
 Grid:
   m_ObjectHideFlags: 0
@@ -1769,6 +1772,18 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!114 &1082039508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1082039503}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b02dc5f04036afa4681788e11a14b132, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1636033022
 GameObject:
   m_ObjectHideFlags: 0
@@ -1780,6 +1795,7 @@ GameObject:
   - component: {fileID: 1636033023}
   - component: {fileID: 1636033025}
   - component: {fileID: 1636033024}
+  - component: {fileID: 1636033026}
   m_Layer: 0
   m_Name: Tilemap
   m_TagString: Untagged
@@ -1921,3 +1937,39 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!19719996 &1636033026
+TilemapCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1636033022}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_MaximumTileChangeCount: 1000
+  m_ExtrusionFactor: 0
+  m_UseDelaunayMesh: 0

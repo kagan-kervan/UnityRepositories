@@ -16,14 +16,27 @@ public class GridSystem : MonoBehaviour
 		this.cellSize = cellSize;
 	}
 
+	public int[,] getArray()
+	{
+		return gridArray;
+	}
+
+	public void SetUpNewGrid(int width , int height)
+	{
+		gridArray = new int[width, height];
+		this.width = width;
+		this.height = height;
+	}
 	public void setValue(int x, int y, int value)
 	{
-		if(x>0 && y>0 && x<width && y < height)
+		if(x>=0 && y>=0 && x<width && y < height)
 		{
 			gridArray[x, y] = value;
+			Debug.Log("Value setted to " + value +"in "+x+" , "+y);
 		}
 
 	}
+
 
 	public void setValue(Vector3 worldPosition,int value)
 	{
@@ -41,7 +54,7 @@ public class GridSystem : MonoBehaviour
 
 	public int getValue(int x, int y)
 	{
-		if (x > 0 && y > 0 && x < width && y < height)
+		if (x >= 0 && y >= 0 && x < width && y < height)
 		{
 			return gridArray[x, y];
 		}
