@@ -10,7 +10,7 @@ public class GridMap : MonoBehaviour
     public int height;
     public int inBoardVerticalWalls;
     public int inBoardHorizontalWalls;
-    public GridSystem grid;
+    private GridSystem grid;
     public Tilemap tileMap;
     public TileBase horizontalWallTile;
     public TileBase verticalWallTile;
@@ -20,7 +20,7 @@ public class GridMap : MonoBehaviour
 	private void Awake()
 	{
 
-        grid.SetUpNewGrid(width, height);
+        grid = new GridSystem(width, height, 64);
         gridArray = grid.getArray();
 
     }
@@ -35,11 +35,13 @@ public class GridMap : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        moveTimer = UpdateTime(moveTimer);
-        if (moveTimer <= 0)
-            CheckForInputs();
     }
 
+
+    public GridSystem GetGridSystem()
+	{
+        return grid;
+	}
     public void CreateMap()
 	{
 		for (int i = 0; i < width; i++) 
@@ -202,111 +204,5 @@ public class GridMap : MonoBehaviour
         playerObj.GetComponent<Player>().SetGridSystem(this.gameObject.GetComponent<GridMap>());
         playerObj.GetComponent<Player>().SetCoordinates(10, 1);
     }
-
-
-    //      ### PLAYER SCRIPT  ###
-
-    private float moveTimer = 0f;
-    
-    private Player.Direction movementDirection;
-    private float UpdateTime(float moveTimer)
-    {
-        moveTimer = moveTimer - Time.deltaTime;
-        return moveTimer;
-    }
-    public void CheckForInputs()
-    {
-        Player.Direction tempdir = Player.Direction.NEUTRAL;
-        if (Input.GetAxisRaw("Vertical") > 0)
-            tempdir = Player.Direction.UP;
-        else if (Input.GetAxisRaw("Vertical") < 0)
-            tempdir = Player.Direction.DOWN;
-        else if (Input.GetAxisRaw("Horizontal") < 0)
-            tempdir = Player.Direction.LEFT;
-        else if (Input.GetAxisRaw("Horizontal") > 0)
-            tempdir = Player.Direction.RIGHT;
-        if (tempdir != Player.Direction.NEUTRAL)
-        {
-            Vector2Int temp = playerObj.GetComponent<Player>().getCoordinates();
-            bool isPossible = isMovementPossible(tempdir,temp);
-            if (isPossible)
-            {
-                MovePlayer(tempdir,temp);
-                moveTimer = 0.32f;
-            }
-        }
-    }
-
-    private bool isMovementPossible(Player.Direction dir, Vector2Int coordinate)
-    {
-        bool flag;
-        switch (dir)
-        {
-            case Player.Direction.DOWN:
-                Debug.Log(grid.getValue(coordinate.x, coordinate.y - 1));
-                if (grid.getValue(coordinate.x, coordinate.y - 1) != 0)
-                    flag = false;
-                else
-                    flag = true;
-                break;
-            case Player.Direction.UP:
-                Debug.Log(grid.getValue(coordinate.x, coordinate.y + 1));
-                if (grid.getValue(coordinate.x, coordinate.y + 1) != 0)
-                    flag = false;
-                else
-                    flag = true;
-                break;
-            case Player.Direction.RIGHT:
-                Debug.Log(grid.getValue(coordinate.x + 1, coordinate.y));
-                if (grid.getValue(coordinate.x + 1, coordinate.y) != 0)
-                    flag = false;
-                else
-                    flag = true;
-                break;
-            case Player.Direction.LEFT:
-                Debug.Log(grid.getValue(coordinate.x - 1, coordinate.y));
-                if (grid.getValue(coordinate.x - 1, coordinate.y )!= 0)
-                    flag = false;
-                else
-                    flag = true;
-                break;
-            default:
-                flag = false;
-                break;
-        }
-        return flag;
-    }
-
-    private void MovePlayer(Player.Direction dir, Vector2Int coordinate)
-    {
-        grid.setValue(coordinate.x, coordinate.y, 0); //Clears the previous spot.
-        switch (dir)
-        {
-            case Player.Direction.DOWN:
-                coordinate.y--;
-                break;
-            case Player.Direction.UP:
-                coordinate.y++;
-                break;
-            case Player.Direction.RIGHT:
-                coordinate.x++;
-                break;
-            case Player.Direction.LEFT:
-                coordinate.x--;
-                break;
-        }
-        playerObj.GetComponent<Player>().movementDirection = dir;
-        grid.setValue(coordinate.x, coordinate.y, 2); //Sets the value for currrent position.
-        playerObj.GetComponent<Player>().MovePlayerFromScene();
-        playerObj.GetComponent<Player>().ChangePlayerSprite();
-        playerObj.GetComponent<Player>().SetCoordinates(coordinate.x, coordinate.y);
-
-    }
-
-    
-
-
-
-    //      ###  PLAYER SCRIPT  ### 
 
 }

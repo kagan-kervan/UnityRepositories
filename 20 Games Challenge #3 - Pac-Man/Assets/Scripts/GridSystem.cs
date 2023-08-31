@@ -20,6 +20,15 @@ public class GridSystem : MonoBehaviour
 	{
 		return gridArray;
 	}
+	public int getWidth()
+	{
+		return width;
+	}
+	public int getHeight()
+	{
+		return height;
+	}
+
 
 	public void SetUpNewGrid(int width , int height)
 	{

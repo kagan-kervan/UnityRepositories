@@ -17,10 +17,10 @@ public class Player : MonoBehaviour
         LEFT, RIGHT, UP, DOWN, NEUTRAL
     };
     public Direction movementDirection;
-    public GridMap gridSystem;
+    public GridSystem grid;
     public void SetGridSystem(GridMap gridObj)
     {
-        gridSystem = gridObj;
+        grid = gridObj.GetGridSystem();
     }
 
     public Vector2Int getCoordinates()
@@ -37,144 +37,146 @@ public class Player : MonoBehaviour
 	}
 
     // Update is called once per frame
-    /*void Update()
+    void Update()
     {
         moveTimer = UpdateTime(moveTimer);
         if(moveTimer<=0)
             CheckForInputs();
     }
 
-	private float UpdateTime(float moveTimer)
-	{
-        moveTimer = moveTimer - Time.deltaTime;
-        return moveTimer;
-	}
+private float UpdateTime(float moveTimer)
+{
+    moveTimer = moveTimer - Time.deltaTime;
+    return moveTimer;
+}
 
-	public void CheckForInputs()
-	{
-        Direction tempdir = Direction.NEUTRAL;
-        if (Input.GetAxisRaw("Vertical") > 0)
-            tempdir = Direction.UP;
-        else if (Input.GetAxisRaw("Vertical") < 0)
-            tempdir = Direction.DOWN;
-        else if (Input.GetAxisRaw("Horizontal") < 0)
-            tempdir = Direction.LEFT;
-        else if (Input.GetAxisRaw("Horizontal") > 0)
-            tempdir = Direction.RIGHT;
-        if(tempdir != Direction.NEUTRAL)
-		{
-            bool isPossible = isMovementPossible(tempdir);
-            if (isPossible)
-			{
-                MovePlayer(tempdir);
-                moveTimer = 0.32f;
-			}
-        }
-	}
-
-    //Checks if the movement that is inputed possible.
-    private bool isMovementPossible(Direction dir)
+public void CheckForInputs()
+{
+    Player.Direction tempdir = Player.Direction.NEUTRAL;
+    if (Input.GetAxisRaw("Vertical") > 0)
+        tempdir = Player.Direction.UP;
+    else if (Input.GetAxisRaw("Vertical") < 0)
+        tempdir = Player.Direction.DOWN;
+    else if (Input.GetAxisRaw("Horizontal") < 0)
+        tempdir = Player.Direction.LEFT;
+    else if (Input.GetAxisRaw("Horizontal") > 0)
+        tempdir = Player.Direction.RIGHT;
+    if (tempdir != Player.Direction.NEUTRAL)
     {
-        bool flag;
-        switch (dir)
+        Vector2Int temp = getCoordinates();
+        bool isPossible = isMovementPossible(tempdir,temp);
+        if (isPossible)
         {
-            case Direction.DOWN:
-                Debug.Log(gridSystem.grid.getValue(x_coordinate, y_coordinate - 1));
-                if (gridSystem.grid.getValue(x_coordinate, y_coordinate - 1) != 0)
-                    flag = false;
-                else
-                    flag = true;
-                break;
-            case Direction.UP:
-                Debug.Log(gridSystem.grid.getValue(x_coordinate, y_coordinate + 1));
-                if (gridSystem.grid.getValue(x_coordinate, y_coordinate + 1) != 0)
-                    flag = false;
-                else
-                    flag = true;
-                break;
-            case Direction.RIGHT:
-                Debug.Log(gridSystem.grid.getValue(x_coordinate+1, y_coordinate));
-                if (gridSystem.grid.getValue(x_coordinate + 1, y_coordinate) != 0)
-                    flag = false;
-                else
-                    flag = true;
-                break;
-            case Direction.LEFT:
-                Debug.Log(gridSystem.grid.getValue(x_coordinate-1, y_coordinate));
-                if (gridSystem.grid.getValue(x_coordinate - 1, y_coordinate) != 0)
-                    flag = false;
-                else
-                    flag = true;
-                break;
-            default:
+            MovePlayer(tempdir,temp);
+            moveTimer = 0.32f;
+        }
+    }
+}
+
+private bool isMovementPossible(Player.Direction dir, Vector2Int coordinate)
+{
+    bool flag;
+    switch (dir)
+    {
+        case Player.Direction.DOWN:
+            Debug.Log(grid.getValue(coordinate.x, coordinate.y - 1));
+            if (grid.getValue(coordinate.x, coordinate.y - 1) != 0)
                 flag = false;
-                break;
-        }
-        return flag;
+            else
+                flag = true;
+            break;
+        case Player.Direction.UP:
+            Debug.Log(grid.getValue(coordinate.x, coordinate.y + 1));
+            if (grid.getValue(coordinate.x, coordinate.y + 1) != 0)
+                flag = false;
+            else
+                flag = true;
+            break;
+        case Player.Direction.RIGHT:
+            Debug.Log(grid.getValue(coordinate.x + 1, coordinate.y));
+            if (grid.getValue(coordinate.x + 1, coordinate.y) != 0)
+                flag = false;
+            else
+                flag = true;
+            break;
+        case Player.Direction.LEFT:
+            Debug.Log(grid.getValue(coordinate.x - 1, coordinate.y));
+            if (grid.getValue(coordinate.x - 1, coordinate.y )!= 0)
+                flag = false;
+            else
+                flag = true;
+            break;
+        default:
+            flag = false;
+            break;
     }
+    return flag;
+}
 
-    private void MovePlayer(Direction dir)
+private void MovePlayer(Player.Direction dir, Vector2Int coordinate)
+{
+    grid.setValue(coordinate.x, coordinate.y, 0); //Clears the previous spot.
+    switch (dir)
     {
-        gridSystem.grid.setValue(x_coordinate, y_coordinate, 0); //Clears the previous spot.
-        switch (dir)
-        {
-            case Direction.DOWN:
-                y_coordinate--;
-                break;
-            case Direction.UP:
-                y_coordinate++;
-                break;
-            case Direction.RIGHT:
-                x_coordinate++;
-                break;
-            case Direction.LEFT:
-                x_coordinate--;
-                break;
-        }
-        movementDirection = dir;
-        gridSystem.grid.setValue(x_coordinate, y_coordinate, 2); //Sets the value for currrent position.
-        MovePlayerFromScene();
-        ChangePlayerSprite();
+        case Player.Direction.DOWN:
+            coordinate.y--;
+            break;
+        case Player.Direction.UP:
+            coordinate.y++;
+            break;
+        case Player.Direction.RIGHT:
+            coordinate.x++;
+            break;
+        case Player.Direction.LEFT:
+            coordinate.x--;
+            break;
+    }
+    movementDirection = dir;
+    grid.setValue(coordinate.x, coordinate.y, 2); //Sets the value for currrent position.
+    MovePlayerFromScene();
+    ChangePlayerSprite();
+    SetCoordinates(coordinate.x, coordinate.y);
 
-    }
-    */
-    public void MovePlayerFromScene()
+}
+public void MovePlayerFromScene()
+{
+    Vector3 pos = this.transform.position;
+    switch (movementDirection)
     {
-        Vector3 pos = this.transform.position;
-        switch (movementDirection)
-        {
-            case Direction.DOWN:
-                pos.y = pos.y - y_axisPerUnit;
-                break;
-            case Direction.UP:
-                pos.y = pos.y + y_axisPerUnit;
-                break;
-            case Direction.RIGHT:
-                pos.x = pos.x + x_axisPerUnit;
-                break;
-            case Direction.LEFT:
-                pos.x = pos.x - x_axisPerUnit;
-                break;
-        }
-        this.transform.position = pos;
+        case Direction.DOWN:
+            pos.y = pos.y - y_axisPerUnit;
+            break;
+        case Direction.UP:
+            pos.y = pos.y + y_axisPerUnit;
+            break;
+        case Direction.RIGHT:
+            pos.x = pos.x + x_axisPerUnit;
+            break;
+        case Direction.LEFT:
+            pos.x = pos.x - x_axisPerUnit;
+            break;
     }
-    
-    public void ChangePlayerSprite()
+    this.transform.position = pos;
+}
+
+public void ChangePlayerSprite()
+{
+    switch (movementDirection)
     {
-        switch (movementDirection)
-        {
-            case Direction.DOWN:
-                spriteRenderer.sprite = pacmanSprites[0];
-                break;
-            case Direction.UP:
-                spriteRenderer.sprite = pacmanSprites[0];
-                break;
-            case Direction.RIGHT:
-                spriteRenderer.sprite = pacmanSprites[1];
-                break;
-            case Direction.LEFT:
-                spriteRenderer.sprite = pacmanSprites[2];
-                break;
-        }
+        case Direction.DOWN:
+            spriteRenderer.sprite = pacmanSprites[0];
+            break;
+        case Direction.UP:
+            spriteRenderer.sprite = pacmanSprites[0];
+            break;
+        case Direction.RIGHT:
+            spriteRenderer.sprite = pacmanSprites[1];
+            break;
+        case Direction.LEFT:
+            spriteRenderer.sprite = pacmanSprites[2];
+            break;
     }
+}
+
+
 }
