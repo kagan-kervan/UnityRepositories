@@ -22,7 +22,7 @@ public class Node
 }
 public class AStar : MonoBehaviour
 {
-	int[,] grid;
+	private int[,] grid;
 	public AStar(int[,] gridArray)
 	{
 		grid = gridArray;
@@ -33,14 +33,14 @@ public class AStar : MonoBehaviour
 		Node startNode = new Node(start, true);
 		Node endNode = new Node(end, true);
 		Stack<Node> stack = new Stack<Node>();
-		List<Node> openList = new List<Node>();
+		List<Node> openList =  new List<Node>();
 		List<Node> ClosedList = new List<Node>();
 		List<Node> adjacencies;
 		Node current = startNode;
 		openList.Add(startNode);
 		while(openList.Count!= 0 && !ClosedList.Exists(x => x.position == endNode.position))
 		{
-			current = openList.dequeue();
+			AddToList(openList,current);
 			ClosedList.Add(current);
 			adjacencies = GetAdjacentNodes(current);
 			foreach(Node n in adjacencies)
@@ -48,9 +48,9 @@ public class AStar : MonoBehaviour
 				if(!ClosedList.Contains(n) && n.walkable)
 				{
 					bool isFound = false;
-					foreach (var oLNode in OpenList.UnorderedItems)
+					foreach (var oLNode in openList)
 					{
-						if (oLNode.Element == n)
+						if (oLNode == n)
 						{
 							isFound = true;
 						}
@@ -59,7 +59,7 @@ public class AStar : MonoBehaviour
 					{
 						n.parent = current;
 						n.distance = Math.Abs(n.position.x - endNode.position.x) + Math.Abs(n.position.y - endNode.position.y);
-						OpenList.Enqueue(n, n.distance);
+						AddToList(openList, n);
 					}
 				}
 			}
@@ -81,6 +81,16 @@ public class AStar : MonoBehaviour
 		return stack;
 	
 }
+
+	private void AddToList(List<Node> openList, Node data)
+	{
+		int i = 0;
+		while (data.distance > openList.ElementAt(i).distance)
+		{
+			i++;
+		}
+		openList.Insert(i, data);
+	}
 
 	private List<Node> GetAdjacentNodes(Node current)
 	{

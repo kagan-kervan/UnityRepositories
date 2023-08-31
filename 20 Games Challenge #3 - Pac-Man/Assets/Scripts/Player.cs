@@ -9,8 +9,8 @@ public class Player : MonoBehaviour
     public SpriteRenderer spriteRenderer;
     public float y_axisPerUnit;
     public float x_axisPerUnit;
-    private int x_coordinate;
-    private int y_coordinate;
+    public int x_coordinate;
+    public int y_coordinate;
     private float moveTimer = 0f;
     public enum Direction
     {

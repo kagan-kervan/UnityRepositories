@@ -251,11 +251,11 @@ MonoBehaviour:
   height: 16
   inBoardVerticalWalls: 8
   inBoardHorizontalWalls: 8
-  grid: {fileID: 1082039508}
   tileMap: {fileID: 1636033025}
   horizontalWallTile: {fileID: 11400000, guid: 4254d28f0aabeb94297fbbe65b7df9a0, type: 2}
   verticalWallTile: {fileID: 11400000, guid: 4254d28f0aabeb94297fbbe65b7df9a0, type: 2}
   playerObj: {fileID: 8537634456682179469, guid: f748504e6c64ee540b642e3b071c3e66, type: 3}
+  enemyObj: {fileID: 5500753954324251064, guid: 76e4e8463f09dad419120d20ad45ce09, type: 3}
 --- !u!156049354 &1082039505
 Grid:
   m_ObjectHideFlags: 0

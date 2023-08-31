@@ -15,6 +15,7 @@ public class GridMap : MonoBehaviour
     public TileBase horizontalWallTile;
     public TileBase verticalWallTile;
     public GameObject playerObj;
+    public GameObject enemyObj;
     public int[,] gridArray;
 
 	private void Awake()
@@ -30,6 +31,7 @@ public class GridMap : MonoBehaviour
     {
         CreateMap();
         CreatePlayer();
+        CreateEnemy(10,9);
     }
 
     // Update is called once per frame
@@ -204,5 +206,18 @@ public class GridMap : MonoBehaviour
         playerObj.GetComponent<Player>().SetGridSystem(this.gameObject.GetComponent<GridMap>());
         playerObj.GetComponent<Player>().SetCoordinates(10, 1);
     }
+
+    public void CreateEnemy(int x, int y)
+	{
+        Vector3 ePos = new Vector3(-0.5f, 1.5f, 0);
+        GameObject g = Instantiate(enemyObj, ePos, enemyObj.transform.rotation) as GameObject;
+        Enemy e = g.GetComponent<Enemy>();
+        e.SetXCoordinate(x);
+        e.SetYCoordinates(y);
+        e.SetPlayer(playerObj.GetComponent<Player>());
+        e.SetUpGridSystem(GetGridSystem());
+        e.CreateNewaStar();
+        grid.setValue(x, y, 3);
+	}
 
 }
