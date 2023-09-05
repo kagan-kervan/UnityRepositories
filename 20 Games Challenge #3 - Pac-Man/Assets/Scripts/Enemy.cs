@@ -104,13 +104,13 @@ public class Enemy : MonoBehaviour
 	{
         Vector2Int temp = moveNode.position;
         if (temp.x == x_coordinates - 1)
-            direction = Player.Direction.DOWN;
-        else if (temp.x == x_coordinates + 1)
-            direction = Player.Direction.UP;
-        else if (temp.y == y_coordinates - 1)
             direction = Player.Direction.LEFT;
-        else if (temp.y == y_coordinates + 1)
+        else if (temp.x == x_coordinates + 1)
             direction = Player.Direction.RIGHT;
+        else if (temp.y == y_coordinates - 1)
+            direction = Player.Direction.DOWN;
+        else if (temp.y == y_coordinates + 1)
+            direction = Player.Direction.UP;
 	}
 
     public void ChangePlayerSprite()

@@ -32,34 +32,29 @@ public class AStar : MonoBehaviour
 	{
 		Node startNode = new Node(start, true);
 		Node endNode = new Node(end, true);
+		startNode.distance = Math.Abs(startNode.position.x - endNode.position.x) + Math.Abs(startNode.position.y - endNode.position.y);
 		Stack<Node> stack = new Stack<Node>();
 		List<Node> openList =  new List<Node>();
 		List<Node> ClosedList = new List<Node>();
 		List<Node> adjacencies;
 		Node current = startNode;
 		openList.Add(startNode);
-		while(openList.Count!= 0 && !ClosedList.Exists(x => x.position == endNode.position))
+		while(openList.Count != 0 && !ClosedList.Exists(x => x.position == endNode.position))
 		{
-			AddToList(openList,current);
+			current = openList[0];
+			openList.Remove(current);
 			ClosedList.Add(current);
 			adjacencies = GetAdjacentNodes(current);
 			foreach(Node n in adjacencies)
 			{
-				if(!ClosedList.Contains(n) && n.walkable)
+				if(!ContainsInTheList(ClosedList,n) && n.walkable)
 				{
-					bool isFound = false;
-					foreach (var oLNode in openList)
-					{
-						if (oLNode == n)
-						{
-							isFound = true;
-						}
-					}
-					if (!isFound)
+					if (!openList.Contains(n))
 					{
 						n.parent = current;
 						n.distance = Math.Abs(n.position.x - endNode.position.x) + Math.Abs(n.position.y - endNode.position.y);
-						AddToList(openList, n);
+						openList.Add(n);
+						openList = openList.OrderBy(node => node.distance).ToList<Node>();
 					}
 				}
 			}
@@ -85,11 +80,24 @@ public class AStar : MonoBehaviour
 	private void AddToList(List<Node> openList, Node data)
 	{
 		int i = 0;
-		while (data.distance > openList.ElementAt(i).distance)
+		while (i<openList.Count && data.distance > openList.ElementAt(i).distance)
 		{
 			i++;
 		}
 		openList.Insert(i, data);
+	}
+
+	private bool ContainsInTheList(List<Node> list, Node node)
+	{
+		int i = 0;
+		bool isFound = false;
+		while(i<list.Count && !isFound)
+		{
+			if (list.ElementAt(i).position == node.position)
+				isFound = true;
+			i++;
+		}
+		return isFound;
 	}
 
 	private List<Node> GetAdjacentNodes(Node current)
@@ -98,26 +106,34 @@ public class AStar : MonoBehaviour
 		List<Node> temp = new List<Node>();
 		int row = (int)current.position.y;
 		int col = (int)current.position.x;
-		if(isValid(col,row+1) && isUnblockable(col,row+1))
+		if(isValid(col,row+1))
 		{
 			Node tempN = new Node(new Vector2Int(col, row + 1), true);
+			if (!isUnblockable(col, row + 1))
+				tempN.walkable = false;
 			temp.Add(tempN);
 		}
-		if(isValid(col,row-1) && isUnblockable(col, row - 1))
+		if(isValid(col,row-1))
 		{
 
 			Node tempN = new Node(new Vector2Int(col, row - 1), true);
+			if (!isUnblockable(col, row - 1))
+				tempN.walkable = false;
 			temp.Add(tempN);
 		}
-		if(isValid(col+1,row) && isUnblockable(col + 1, row))
+		if(isValid(col+1,row))
 		{
 			Node tempN = new Node(new Vector2Int(col+1, row), true);
+			if (!isUnblockable(col + 1, row))
+				tempN.walkable = false;
 			temp.Add(tempN);
 		}
 
-		if (isValid(col - 1, row) && isUnblockable(col - 1, row))
+		if (isValid(col - 1, row))
 		{
 			Node tempN = new Node(new Vector2Int(col - 1, row), true);
+			if (!isUnblockable(col - 1, row))
+				tempN.walkable = false;
 			temp.Add(tempN);
 		}
 		return temp;
@@ -125,7 +141,7 @@ public class AStar : MonoBehaviour
 
 	private bool isUnblockable(int coord_x, int coord_y)
 	{
-		if (grid[coord_x, coord_y] != 0 || grid[coord_x, coord_y] != 3)
+		if (grid[coord_x, coord_y] == 1)
 			return false;
 		return true;
 	}
@@ -139,8 +155,4 @@ public class AStar : MonoBehaviour
 		return false;
 	}
 
-	private void SortLists(List<Node> l)
-	{
-
-	}
 }

@@ -79,28 +79,24 @@ private bool isMovementPossible(Player.Direction dir, Vector2Int coordinate)
     switch (dir)
     {
         case Player.Direction.DOWN:
-            Debug.Log(grid.getValue(coordinate.x, coordinate.y - 1));
             if (grid.getValue(coordinate.x, coordinate.y - 1) != 0)
                 flag = false;
             else
                 flag = true;
             break;
         case Player.Direction.UP:
-            Debug.Log(grid.getValue(coordinate.x, coordinate.y + 1));
             if (grid.getValue(coordinate.x, coordinate.y + 1) != 0)
                 flag = false;
             else
                 flag = true;
             break;
         case Player.Direction.RIGHT:
-            Debug.Log(grid.getValue(coordinate.x + 1, coordinate.y));
             if (grid.getValue(coordinate.x + 1, coordinate.y) != 0)
                 flag = false;
             else
                 flag = true;
             break;
         case Player.Direction.LEFT:
-            Debug.Log(grid.getValue(coordinate.x - 1, coordinate.y));
             if (grid.getValue(coordinate.x - 1, coordinate.y )!= 0)
                 flag = false;
             else

@@ -41,7 +41,6 @@ public class GridSystem : MonoBehaviour
 		if(x>=0 && y>=0 && x<width && y < height)
 		{
 			gridArray[x, y] = value;
-			Debug.Log("Value setted to " + value +"in "+x+" , "+y);
 		}
 
 	}
