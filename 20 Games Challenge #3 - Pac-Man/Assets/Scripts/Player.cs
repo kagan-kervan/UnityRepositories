@@ -12,15 +12,24 @@ public class Player : MonoBehaviour
     public int x_coordinate;
     public int y_coordinate;
     private float moveTimer = 0f;
+    public float powerUpTimer = 0f;
+    public bool isAlive;
+    public bool havePowerUp;
     public enum Direction
     {
         LEFT, RIGHT, UP, DOWN, NEUTRAL
     };
     public Direction movementDirection;
     public GridSystem grid;
+    private GridMap gridMap;
+    public int score;
     public void SetGridSystem(GridMap gridObj)
     {
         grid = gridObj.GetGridSystem();
+        gridMap = gridObj;
+        score = 0;
+        isAlive = true;
+        havePowerUp = false;
     }
 
     public Vector2Int getCoordinates()
@@ -40,8 +49,14 @@ public class Player : MonoBehaviour
     void Update()
     {
         moveTimer = UpdateTime(moveTimer);
-        if(moveTimer<=0)
+        if (powerUpTimer >= 0)
+            powerUpTimer = UpdateTime(powerUpTimer);
+        if(moveTimer<=0 && isAlive)
             CheckForInputs();
+		if (powerUpTimer < 0)
+		{
+            havePowerUp = false;
+		}
     }
 
 private float UpdateTime(float moveTimer)
@@ -68,7 +83,7 @@ public void CheckForInputs()
         if (isPossible)
         {
             MovePlayer(tempdir,temp);
-            moveTimer = 0.32f;
+            moveTimer = 0.16f;
         }
     }
 }
@@ -80,25 +95,45 @@ private bool isMovementPossible(Player.Direction dir, Vector2Int coordinate)
     {
         case Player.Direction.DOWN:
             if (grid.getValue(coordinate.x, coordinate.y - 1) != 0)
-                flag = false;
+			{
+                    if (grid.getValue(coordinate.x, coordinate.y - 1) != 4)
+                        flag = false;
+                    else
+                        flag = true;
+            }
             else
                 flag = true;
             break;
         case Player.Direction.UP:
             if (grid.getValue(coordinate.x, coordinate.y + 1) != 0)
-                flag = false;
+				{
+                    if (grid.getValue(coordinate.x, coordinate.y + 1) != 4)
+                        flag = false;
+                    else
+                        flag = true;
+				}
             else
                 flag = true;
             break;
         case Player.Direction.RIGHT:
             if (grid.getValue(coordinate.x + 1, coordinate.y) != 0)
-                flag = false;
+				{
+                    if (grid.getValue(coordinate.x + 1, coordinate.y) != 4)
+                        flag = false;
+                    else
+                        flag = true;
+                }
             else
                 flag = true;
             break;
         case Player.Direction.LEFT:
             if (grid.getValue(coordinate.x - 1, coordinate.y )!= 0)
-                flag = false;
+				{
+                    if (grid.getValue(coordinate.x - 1, coordinate.y) != 4)
+                        flag = false;
+                    else
+                        flag = true;
+				}
             else
                 flag = true;
             break;
@@ -127,6 +162,7 @@ private void MovePlayer(Player.Direction dir, Vector2Int coordinate)
             coordinate.x--;
             break;
     }
+    CheckForScoresPlayer(coordinate);
     movementDirection = dir;
     grid.setValue(coordinate.x, coordinate.y, 2); //Sets the value for currrent position.
     MovePlayerFromScene();
@@ -134,6 +170,21 @@ private void MovePlayer(Player.Direction dir, Vector2Int coordinate)
     SetCoordinates(coordinate.x, coordinate.y);
 
 }
+ public void CheckForScoresPlayer(Vector2Int pos)
+	{
+		if (grid.getValue(pos.x, pos.y) == 4)
+		{
+            gridMap.tileMap.SetTile(new Vector3Int(pos.x, pos.y, 0), null);
+            score = score + 100;
+            gridMap.numOfScores--;
+            System.Random r = new System.Random();
+			if (r.Next(640) <= 8)
+			{
+                havePowerUp = true;
+                powerUpTimer = 3.0f;
+			}
+		}
+	}
 public void MovePlayerFromScene()
 {
     Vector3 pos = this.transform.position;

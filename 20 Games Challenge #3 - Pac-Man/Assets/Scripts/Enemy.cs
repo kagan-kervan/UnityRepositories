@@ -16,6 +16,8 @@ public class Enemy : MonoBehaviour
     private AStar aStarAlgo;
     private float moveTimer;
     public Player pl;
+    public bool isArriveToPlayer;
+    private GridMap gridMap;
 
 
     public void SetXCoordinate(int value)
@@ -32,7 +34,10 @@ public class Enemy : MonoBehaviour
 	{
         gridSystem = grid;
 	}
-
+    public void SetUpGridMAp(GridMap grid)
+	{
+        gridMap = grid;
+	}
     public void SetPlayer(Player player)
 	{
         pl = player;
@@ -42,7 +47,8 @@ public class Enemy : MonoBehaviour
 	{
         spriteRenderer = this.GetComponent<SpriteRenderer>();
         moveTimer = 0;
-	}
+        isArriveToPlayer = false;
+    }
 
     public void CreateNewaStar()
 	{
@@ -58,7 +64,7 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         moveTimer = UpdateTime(moveTimer);
-		if (moveTimer < 0)
+		if (moveTimer < 0 && !isArriveToPlayer)
 		{
             MoveEnemy(new Vector2Int(pl.x_coordinate, pl.y_coordinate));
 		}
@@ -94,10 +100,24 @@ public class Enemy : MonoBehaviour
                 pos.x = pos.x - x_axisPerUnit;
                 break;
         }
+		if (gridSystem.getValue(x_coordinates, y_coordinates) == 4)
+		{
+            gridMap.tileMap.SetTile(new Vector3Int(x_coordinates,y_coordinates,0), null);
+            pl.score = pl.score - 100;
+            gridMap.numOfScores--;
+		}
         this.transform.position = pos;
+        if(pos == pl.gameObject.transform.position)
+		{
+            isArriveToPlayer = true;
+            //Finish game.
+            pl.isAlive = false;
+            Destroy(pl.gameObject);
+            Debug.Log("Game over.");
+		}
         gridSystem.setValue(x_coordinates, y_coordinates, 3); //Sets the value for currrent position.
         ChangePlayerSprite();
-        moveTimer = 0.3f;
+        moveTimer = 0.75f;
     }
 
     private void DeterminateMoveDirection(Node moveNode)

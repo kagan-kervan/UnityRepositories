@@ -14,15 +14,19 @@ public class GridMap : MonoBehaviour
     public Tilemap tileMap;
     public TileBase horizontalWallTile;
     public TileBase verticalWallTile;
+    public TileBase coinTileBase;
+    public TileBase powerUpTileBase;
     public GameObject playerObj;
     public GameObject enemyObj;
     public int[,] gridArray;
+    public int numOfScores;
 
 	private void Awake()
 	{
 
         grid = new GridSystem(width, height, 64);
         gridArray = grid.getArray();
+        numOfScores = 0;
 
     }
 
@@ -32,11 +36,17 @@ public class GridMap : MonoBehaviour
         CreateMap();
         CreatePlayer();
         CreateEnemy(10,9);
+        FillRestOfTheMap();
     }
 
     // Update is called once per frame
     void Update()
     {
+		if (isGameFinished())
+		{
+            Debug.Log("Game finished.");
+            Destroy(playerObj);
+		}
     }
 
 
@@ -87,7 +97,28 @@ public class GridMap : MonoBehaviour
         grid.setValue(width, height, 1); // 1 is being used for walls.
     }
 
-    private void SetUpTheCenterArea(int midPointhorizontal, int midPointVertical, TileBase tile)
+    private void FillRestOfTheMap()
+	{
+		for (int i = 0; i < grid.getWidth(); i++)
+		{
+			for (int j = 0; j < grid.getHeight(); j++)
+			{
+                if (grid.getValue(i, j) == 0)
+                {
+                    CreateScoreTile(i, j);
+                    numOfScores++;
+                }
+			}
+		}
+	}
+
+	private void CreateScoreTile(int x,int y)
+	{
+        tileMap.SetTile(new Vector3Int(x, y, 0), coinTileBase);
+        grid.setValue(x, y, 4);
+	}
+
+	private void SetUpTheCenterArea(int midPointhorizontal, int midPointVertical, TileBase tile)
 	{
 		for (int i = 0; i < 4; i++)
 		{
@@ -216,8 +247,13 @@ public class GridMap : MonoBehaviour
         e.SetYCoordinates(y);
         e.SetPlayer(playerObj.GetComponent<Player>());
         e.SetUpGridSystem(GetGridSystem());
+        e.SetUpGridMAp(this.gameObject.GetComponent<GridMap>());
         e.CreateNewaStar();
         grid.setValue(x, y, 3);
 	}
 
+	private bool isGameFinished()
+	{
+        return numOfScores <= 0;
+	}
 }
