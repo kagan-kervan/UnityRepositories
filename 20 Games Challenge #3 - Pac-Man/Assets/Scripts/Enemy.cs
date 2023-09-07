@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public Sprite[] sprites;
+    public Sprite[] normalSprites;
+    public Sprite[] edibleSprites;
     private SpriteRenderer spriteRenderer;
     private int x_coordinates;
     private int y_coordinates;
@@ -41,7 +42,9 @@ public class Enemy : MonoBehaviour
     public void SetPlayer(Player player)
 	{
         pl = player;
-	}
+	
+    }
+
 
 	private void OnEnable()
 	{
@@ -63,8 +66,8 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        moveTimer = UpdateTime(moveTimer);
-		if (moveTimer < 0 && !isArriveToPlayer)
+            moveTimer = UpdateTime(moveTimer);
+        if (moveTimer < 0 && !isArriveToPlayer)
 		{
             MoveEnemy(new Vector2Int(pl.x_coordinate, pl.y_coordinate));
 		}
@@ -76,7 +79,14 @@ public class Enemy : MonoBehaviour
     }
     private void MoveEnemy(Vector2Int dest)
 	{
-        Stack<Node> aStarPath = aStarAlgo.FindPath(new Vector2Int(x_coordinates, y_coordinates), dest);
+        Stack<Node> aStarPath;
+        if (pl.havePowerUp)
+		{
+            //When power up is opened, go to center of board.
+            aStarPath = aStarAlgo.FindPath(new Vector2Int(x_coordinates, y_coordinates), new Vector2Int(10, 10));
+		}
+        else
+            aStarPath = aStarAlgo.FindPath(new Vector2Int(x_coordinates, y_coordinates), dest);
         Node nextMove = aStarPath.Pop();
         DeterminateMoveDirection(nextMove);
         gridSystem.setValue(x_coordinates, y_coordinates, 0); //Clears the previous spot.
@@ -135,20 +145,42 @@ public class Enemy : MonoBehaviour
 
     public void ChangePlayerSprite()
     {
-        switch (direction)
+		if (pl.havePowerUp)
+		{
+            switch (direction)
+            {
+                case Player.Direction.DOWN:
+                    spriteRenderer.sprite = edibleSprites[0];
+                    break;
+                case Player.Direction.UP:
+                    spriteRenderer.sprite = edibleSprites[3];
+                    break;
+                case Player.Direction.RIGHT:
+                    spriteRenderer.sprite = edibleSprites[1];
+                    break;
+                case Player.Direction.LEFT:
+                    spriteRenderer.sprite = edibleSprites[2];
+                    break;
+            }
+        }
+		else
         {
-            case Player.Direction.DOWN:
-                spriteRenderer.sprite = sprites[0];
-                break;
-            case Player.Direction.UP:
-                spriteRenderer.sprite = sprites[0];
-                break;
-            case Player.Direction.RIGHT:
-                spriteRenderer.sprite = sprites[1];
-                break;
-            case Player.Direction.LEFT:
-                spriteRenderer.sprite = sprites[2];
-                break;
+            switch (direction)
+            {
+                case Player.Direction.DOWN:
+                    spriteRenderer.sprite = normalSprites[0];
+                    break;
+                case Player.Direction.UP:
+                    spriteRenderer.sprite = normalSprites[3];
+                    break;
+                case Player.Direction.RIGHT:
+                    spriteRenderer.sprite = normalSprites[1];
+                    break;
+                case Player.Direction.LEFT:
+                    spriteRenderer.sprite = normalSprites[2];
+                    break;
+            }
+
         }
     }
 

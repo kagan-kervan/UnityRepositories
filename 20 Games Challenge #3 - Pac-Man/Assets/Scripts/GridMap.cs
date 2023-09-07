@@ -97,7 +97,8 @@ public class GridMap : MonoBehaviour
         grid.setValue(width, height, 1); // 1 is being used for walls.
     }
 
-    private void FillRestOfTheMap()
+
+	private void FillRestOfTheMap()
 	{
 		for (int i = 0; i < grid.getWidth(); i++)
 		{
@@ -242,6 +243,7 @@ public class GridMap : MonoBehaviour
 	{
         Vector3 ePos = new Vector3(-0.5f, 1.5f, 0);
         GameObject g = Instantiate(enemyObj, ePos, enemyObj.transform.rotation) as GameObject;
+        enemyObj = g;
         Enemy e = g.GetComponent<Enemy>();
         e.SetXCoordinate(x);
         e.SetYCoordinates(y);
@@ -256,4 +258,13 @@ public class GridMap : MonoBehaviour
 	{
         return numOfScores <= 0;
 	}
+
+    public  void MoveEnemyToCenter()
+    {
+       enemyObj.transform.position = new Vector3(-0.5f, 1.5f, 0);
+       Enemy en = enemyObj.GetComponent<Enemy>();
+        en.SetXCoordinate(10);
+        en.SetYCoordinates(9);
+        grid.setValue(10, 9, 3);
+    }
 }

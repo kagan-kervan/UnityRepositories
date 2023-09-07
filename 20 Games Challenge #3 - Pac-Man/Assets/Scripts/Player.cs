@@ -91,6 +91,91 @@ public void CheckForInputs()
 private bool isMovementPossible(Player.Direction dir, Vector2Int coordinate)
 {
     bool flag;
+		if (havePowerUp)
+		{
+			switch (dir)
+			{
+
+                case Player.Direction.DOWN:
+                    Debug.Log(grid.getValue(coordinate.x, coordinate.y - 1));
+                    if (grid.getValue(coordinate.x, coordinate.y - 1) != 0)
+                    {
+						if (grid.getValue(coordinate.x, coordinate.y - 1) == 3)
+						{
+                            gridMap.MoveEnemyToCenter();
+                            score = score + 3000;
+                            flag = true;
+						}
+                        else if (grid.getValue(coordinate.x, coordinate.y - 1) != 4)
+                            flag = false;
+                        else
+                            flag = true;
+                    }
+                    else
+                        flag = true;
+                    break;
+                case Player.Direction.UP:
+                    Debug.Log(grid.getValue(coordinate.x, coordinate.y + 1));
+                    if (grid.getValue(coordinate.x, coordinate.y + 1) != 0)
+                    {
+
+                        if (grid.getValue(coordinate.x, coordinate.y + 1) == 3)
+                        {
+                            gridMap.MoveEnemyToCenter();
+                            score = score + 3000;
+                            flag = true;
+                        }
+                        else if (grid.getValue(coordinate.x, coordinate.y + 1) != 4)
+                            flag = false;
+                        else
+                            flag = true;
+                    }
+                    else
+                        flag = true;
+                    break;
+                case Player.Direction.RIGHT:
+                    Debug.Log(grid.getValue(coordinate.x + 1, coordinate.y));
+                    if (grid.getValue(coordinate.x + 1, coordinate.y) != 0)
+                    {
+
+                        if (grid.getValue(coordinate.x + 1, coordinate.y) == 3)
+                        {
+                            gridMap.MoveEnemyToCenter();
+                            score = score + 3000;
+                            powerUpTimer = -1;
+                            flag = true;
+                        }
+                        else if (grid.getValue(coordinate.x + 1, coordinate.y) != 4)
+                            flag = false;
+                        else
+                            flag = true;
+                    }
+                    else
+                        flag = true;
+                    break;
+                case Player.Direction.LEFT:
+                    Debug.Log(grid.getValue(coordinate.x - 1, coordinate.y));
+                    if (grid.getValue(coordinate.x - 1, coordinate.y) != 0)
+                    {
+                        if (grid.getValue(coordinate.x - 1, coordinate.y) == 3)
+                        {
+                            gridMap.MoveEnemyToCenter();
+                            score = score + 3000;
+                            flag = true;
+                        }
+                        else if (grid.getValue(coordinate.x - 1, coordinate.y) != 4)
+                            flag = false;
+                        else
+                            flag = true;
+                    }
+                    else
+                        flag = true;
+                    break;
+                default:
+                    flag = false;
+                    break;
+            }
+		}
     switch (dir)
     {
         case Player.Direction.DOWN:
@@ -178,10 +263,10 @@ private void MovePlayer(Player.Direction dir, Vector2Int coordinate)
             score = score + 100;
             gridMap.numOfScores--;
             System.Random r = new System.Random();
-			if (r.Next(640) <= 8)
+			if (r.Next(640) <= 80)
 			{
                 havePowerUp = true;
-                powerUpTimer = 3.0f;
+                powerUpTimer = 6.0f;
 			}
 		}
 	}
