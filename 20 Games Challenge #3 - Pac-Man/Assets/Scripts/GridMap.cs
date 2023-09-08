@@ -18,7 +18,9 @@ public class GridMap : MonoBehaviour
     public TileBase coinTileBase;
     public TileBase powerUpTileBase;
     public GameObject playerObj;
+    public GameObject tempPlayerObj;
     public GameObject enemyObj;
+    public GameObject tempEnemyObj;
     public int[,] gridArray;
 	public int numOfScores;
     public SceneManager sceneManager;
@@ -40,7 +42,7 @@ public class GridMap : MonoBehaviour
 		{
             Debug.Log("Game finished.");
             sceneManager.ActivateFinishedGameMenu();
-            Destroy(playerObj);
+            Destroy(tempPlayerObj);
         }
     }
 
@@ -241,21 +243,22 @@ public class GridMap : MonoBehaviour
     public void CreatePlayer()
 	{
         Vector3 playerPos = new Vector3(-0.5f, -6.5f, 0);
-        playerObj = Instantiate(playerObj, playerPos, playerObj.transform.rotation) as GameObject;
+        tempPlayerObj = Instantiate(playerObj, playerPos, playerObj.transform.rotation) as GameObject;
         grid.setValue(10, 1, 2);
-        playerObj.GetComponent<Player>().SetGridSystem(this.gameObject.GetComponent<GridMap>());
-        playerObj.GetComponent<Player>().SetCoordinates(10, 1);
+        tempPlayerObj.GetComponent<Player>().SetGridSystem(this.gameObject.GetComponent<GridMap>());
+        tempPlayerObj.GetComponent<Player>().SetCoordinates(10, 1);
+        tempPlayerObj.SetActive(true);
     }
 
     public void CreateEnemy(int x, int y)
 	{
         Vector3 ePos = new Vector3(-0.5f, 1.5f, 0);
         GameObject g = Instantiate(enemyObj, ePos, enemyObj.transform.rotation) as GameObject;
-        enemyObj = g;
-        Enemy e = g.GetComponent<Enemy>();
+        tempEnemyObj = g;
+        Enemy e = tempEnemyObj.GetComponent<Enemy>();
         e.SetXCoordinate(x);
         e.SetYCoordinates(y);
-        e.SetPlayer(playerObj.GetComponent<Player>());
+        e.SetPlayer(tempPlayerObj.GetComponent<Player>());
         e.SetUpGridSystem(GetGridSystem());
         e.SetUpGridMAp(this.gameObject.GetComponent<GridMap>());
         e.CreateNewaStar();
@@ -270,8 +273,8 @@ public class GridMap : MonoBehaviour
     public void SetBoardInactive()
     {
         tileMap.gameObject.SetActive(false);
-        if (enemyObj != null)
-            Destroy(enemyObj);
+        if (tempEnemyObj != null)
+            Destroy(tempEnemyObj);
         if(playerObj != null)
             playerObj.SetActive(false);
     }
@@ -282,8 +285,8 @@ public class GridMap : MonoBehaviour
     }
     public void MoveEnemyToCenter()
     {
-       enemyObj.transform.position = new Vector3(-0.5f, 1.5f, 0);
-       Enemy en = enemyObj.GetComponent<Enemy>();
+       tempEnemyObj.transform.position = new Vector3(-0.5f, 1.5f, 0);
+       Enemy en = tempEnemyObj.GetComponent<Enemy>();
         en.SetXCoordinate(10);
         en.SetYCoordinates(9);
         grid.setValue(10, 9, 3);

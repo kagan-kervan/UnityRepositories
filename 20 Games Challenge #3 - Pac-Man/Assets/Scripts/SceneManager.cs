@@ -33,14 +33,14 @@ public class SceneManager : MonoBehaviour
 
 	public void ActivateFinishedGameMenu()
 	{
-		EditScoreText(gameFinishedcoreText,gridMap.playerObj.GetComponent<Player>().score);
+		EditScoreText(gameFinishedcoreText,gridMap.tempPlayerObj.GetComponent<Player>().score);
 		gridMap.SetBoardInactive();
 		finishedGameObj.SetActive(true);
 	}
 	public void ActivateGameOverMenu()
 	{
 
-		EditScoreText(gameOverscoreText, gridMap.playerObj.GetComponent<Player>().score);
+		EditScoreText(gameOverscoreText, gridMap.tempPlayerObj.GetComponent<Player>().score);
 		gridMap.SetBoardInactive();
 		gameOverObj.SetActive(true);
 
