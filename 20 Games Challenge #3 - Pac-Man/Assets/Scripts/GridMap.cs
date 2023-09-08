@@ -13,40 +13,35 @@ public class GridMap : MonoBehaviour
     private GridSystem grid;
     public Tilemap tileMap;
     public TileBase horizontalWallTile;
-    public TileBase verticalWallTile;
+
+	public TileBase verticalWallTile;
     public TileBase coinTileBase;
     public TileBase powerUpTileBase;
     public GameObject playerObj;
     public GameObject enemyObj;
     public int[,] gridArray;
-    public int numOfScores;
+	public int numOfScores;
+    public SceneManager sceneManager;
 
-	private void Awake()
+	private void OnEnable()
 	{
-
-        grid = new GridSystem(width, height, 64);
-        gridArray = grid.getArray();
-        numOfScores = 0;
-
     }
 
 	// Start is called before the first frame update
 	void Start()
     {
-        CreateMap();
-        CreatePlayer();
-        CreateEnemy(10,9);
-        FillRestOfTheMap();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-		if (isGameFinished())
+		if (isGameFinished() && this.gameObject.activeInHierarchy)
 		{
             Debug.Log("Game finished.");
+            sceneManager.ActivateFinishedGameMenu();
             Destroy(playerObj);
-		}
+        }
     }
 
 
@@ -54,6 +49,19 @@ public class GridMap : MonoBehaviour
 	{
         return grid;
 	}
+
+    public void CreateLevel()
+    {
+
+        grid = new GridSystem(width, height, 64);
+        gridArray = grid.getArray();
+        numOfScores = 0;
+        CreateMap();
+        CreatePlayer();
+        CreateEnemy(10, 9);
+        FillRestOfTheMap();
+    }
+
     public void CreateMap()
 	{
 		for (int i = 0; i < width; i++) 
@@ -259,7 +267,20 @@ public class GridMap : MonoBehaviour
         return numOfScores <= 0;
 	}
 
-    public  void MoveEnemyToCenter()
+    public void SetBoardInactive()
+    {
+        tileMap.gameObject.SetActive(false);
+        if (enemyObj != null)
+            Destroy(enemyObj);
+        if(playerObj != null)
+            playerObj.SetActive(false);
+    }
+    public void SetBoardActive()
+	{
+        this.gameObject.SetActive(true);
+        tileMap.gameObject.SetActive(true);
+    }
+    public void MoveEnemyToCenter()
     {
        enemyObj.transform.position = new Vector3(-0.5f, 1.5f, 0);
        Enemy en = enemyObj.GetComponent<Enemy>();

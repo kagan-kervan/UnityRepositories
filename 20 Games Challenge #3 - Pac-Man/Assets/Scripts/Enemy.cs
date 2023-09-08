@@ -122,9 +122,9 @@ public class Enemy : MonoBehaviour
             isArriveToPlayer = true;
             //Finish game.
             pl.isAlive = false;
+            gridMap.sceneManager.ActivateGameOverMenu();
             Destroy(pl.gameObject);
-            Debug.Log("Game over.");
-		}
+        }
         gridSystem.setValue(x_coordinates, y_coordinates, 3); //Sets the value for currrent position.
         ChangePlayerSprite();
         moveTimer = 0.75f;

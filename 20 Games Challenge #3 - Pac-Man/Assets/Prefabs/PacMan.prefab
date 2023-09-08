@@ -105,7 +105,14 @@ MonoBehaviour:
   spriteRenderer: {fileID: 4019137100994319927}
   y_axisPerUnit: 1
   x_axisPerUnit: 1
-  gridSystem: {fileID: 0}
+  x_coordinate: 0
+  y_coordinate: 0
+  powerUpTimer: 0
+  isAlive: 0
+  havePowerUp: 0
+  movementDirection: 0
+  grid: {fileID: 0}
+  score: 0
 --- !u!135 &861745118133399730
 SphereCollider:
   m_ObjectHideFlags: 0
